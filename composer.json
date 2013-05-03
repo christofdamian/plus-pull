@@ -1,0 +1,16 @@
+{
+    "name": "cdamian/pluspush",
+    "require": {
+        "symfony/console": "*",
+        "knplabs/github-api": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "authors": [
+        {
+            "name": "Christof Damian",
+            "email": "christof@damian.net"
+        }
+    ]
+}

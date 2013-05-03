@@ -1,0 +1,9 @@
+# composer
+/composer.phar
+/vendor/
+
+# eclipse
+/.project
+/.buildpath
+/.settings
+
