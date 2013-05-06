@@ -2,10 +2,14 @@
     "name": "cdamian/pluspush",
     "require": {
         "symfony/console": "*",
-        "knplabs/github-api": "*"
+        "symfony/yaml": "*",
+        "knplabs/github-api": "*@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-0": { "PlusPush\\": "src/" }
     },
     "authors": [
         {

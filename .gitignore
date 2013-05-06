@@ -7,3 +7,9 @@
 /.buildpath
 /.settings
 
+# build
+/build/logs
+
+# artifacts
+/config.yml
+
