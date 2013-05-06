@@ -1,16 +1,16 @@
 <?php
 
-namespace tests\PlusPush;
+namespace tests\PlusPush\GitHub;
 
-use PlusPush\PullRequestChecker;
+use PlusPush\GitHub\PullRequest;
 
-class PullRequestCheckerTest extends \PHPUnit_Framework_TestCase
+class PullRequestTest extends \PHPUnit_Framework_TestCase
 {
-    private $pullRequestChecker;
+    private $pullRequest;
 
     public function setUp()
     {
-        $this->pullRequestChecker = new PullRequestChecker();
+        $this->pullRequest = new PullRequest();
     }
 
 
@@ -19,22 +19,22 @@ class PullRequestCheckerTest extends \PHPUnit_Framework_TestCase
         return array(
             'blocker' => array(
                 'comments' => array(
-                     array('body' => '[B]'),
+                     '[B]',
                 ),
                 'expected' => false,
             ),
             'ok' => array(
                 'comments' => array(
-                     array('body' => '+1'),
-                     array('body' => '+1'),
+                     '+1',
+                     '+1',
                 ),
                 'expected' => true,
             ),
             'too low' => array(
                 'comments' => array(
-                     array('body' => '+1'),
-                     array('body' => '+1'),
-                     array('body' => '-1'),
+                     '+1',
+                     '+1',
+                     '-1',
                 ),
                 'expected' => false,
             ),
@@ -50,9 +50,11 @@ class PullRequestCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckComments($comments, $expected)
     {
+        $this->pullRequest->comments = $comments;
+
         $this->assertEquals(
             $expected,
-            $this->pullRequestChecker->checkComments($comments, 2)
+            $this->pullRequest->checkComments(2)
         );
     }
 
@@ -80,7 +82,7 @@ class PullRequestCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $isBlocker,
-            $this->pullRequestChecker->isBlocker($commentBody)
+            $this->pullRequest->isBlocker($commentBody)
         );
     }
 
@@ -125,7 +127,7 @@ class PullRequestCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $value,
-            $this->pullRequestChecker->getCommentValue($commentBody)
+            $this->pullRequest->getCommentValue($commentBody)
         );
     }
 }
