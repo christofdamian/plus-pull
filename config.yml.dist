@@ -1,0 +1,8 @@
+authorization:
+    username: christofdamian
+    password: secret
+
+repository:
+    username: christofdamian
+    name: test
+    status: true

@@ -21,7 +21,7 @@ class GitHub
     {
         $this->client->getHttpClient()->setHeaders(
             array(
-                'User-Agent' => 'christofdamian/PlusPush',
+                'User-Agent' => 'christofdamian/plus-push',
             )
         );
 
