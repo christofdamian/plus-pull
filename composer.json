@@ -1,5 +1,5 @@
 {
-    "name": "cdamian/pluspush",
+    "name": "christofdamian/plus-pull",
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
@@ -9,7 +9,7 @@
         "phpunit/phpunit": "*"
     },
     "autoload": {
-        "psr-0": { "PlusPush\\": "src/" }
+        "psr-0": { "PlusPull\\": "src/" }
     },
     "authors": [
         {

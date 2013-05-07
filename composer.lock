@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "625e4fa7ef15e54c5d18a74e742c4745",
+    "hash": "e75e85cfdba3654ceb48d110167bf378",
     "packages": [
         {
             "name": "knplabs/github-api",
