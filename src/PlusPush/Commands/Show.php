@@ -28,7 +28,12 @@ class Show extends Command
     {
         $config = $this->getYaml()->parse('config.yml');
 
+        if (!is_array($config) || empty($config)) {
+            throw new \InvalidArgumentException('Empty or missing config file');
+        }
+
         $github = $this->getGitHub();
+
         $github->authenticate(
             $config['authorization']['username'],
             $config['authorization']['password']
@@ -36,7 +41,7 @@ class Show extends Command
 
         $username = $config['repository']['username'];
         $repository = $config['repository']['name'];
-        $checkStatus = $config['repository']['status'];
+        $checkStatus = !empty($config['repository']['status']);
 
         $github->setRepository($username, $repository);
 
@@ -46,6 +51,7 @@ class Show extends Command
             if ($pullRequest->checkComments()) {
                 $output->write(' OK');
             }
+
             $output->writeln('');
         }
     }

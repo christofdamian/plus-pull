@@ -190,8 +190,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 $this->equalTo(self::GITHUP_USERNAME),
                 $this->equalTo(self::GITHUB_REPOSITORY),
                 $this->equalTo($number)
-            )
-            ->will($this->returnValue($pullRequestData));
+            );
 
         $this->client->expects($this->once())
             ->method('api')

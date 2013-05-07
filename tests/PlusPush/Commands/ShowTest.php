@@ -20,7 +20,25 @@ class ShowTest extends \PHPUnit_Framework_TestCase
             new PullRequest()
         );
 
-        $yaml = $this->getMock('Symfony\Component\Yaml\Yaml');
+        $config = array(
+            'authorization' => array(
+                'username' => 'testuser',
+                'password' => 'secret',
+            ),
+            'repository' => array(
+                'name' => 'test-repo',
+                'username' => 'test-owner',
+                'status' => false,
+            ),
+        );
+
+        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $yaml->staticExpects($this->any())
+            ->method('parse')
+            ->will($this->returnValue($config));
+
         $github = $this->getMockBuilder('PlusPush\GitHub')
             ->disableOriginalConstructor()
             ->getMock();

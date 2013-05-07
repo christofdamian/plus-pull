@@ -49,15 +49,13 @@ class GitHub
         $result = array();
 
         foreach ($data as $row) {
-            $title = $row['title'];
             $number = $row['number'];
-            $sha = $row['head']['sha'];
 
             $pullRequest = new PullRequest();
             $pullRequest->number = $number;
-            $pullRequest->title = $title;
+            $pullRequest->title = $row['title'];
             $pullRequest->comments = $this->getComments($number);
-            $pullRequest->statuses = $this->getStatuses($sha);
+            $pullRequest->statuses = $this->getStatuses($row['head']['sha']);
 
             $result[] = $pullRequest;
         }
