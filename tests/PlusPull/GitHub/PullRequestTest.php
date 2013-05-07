@@ -2,6 +2,8 @@
 
 namespace tests\PlusPull\GitHub;
 
+use PlusPull\GitHub\Comment;
+
 use PlusPull\GitHub\PullRequest;
 
 class PullRequestTest extends \PHPUnit_Framework_TestCase
@@ -19,22 +21,30 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
         return array(
             'blocker' => array(
                 'comments' => array(
-                     '[B]',
+                     new Comment('usera', '[B]'),
                 ),
                 'expected' => false,
             ),
             'ok' => array(
                 'comments' => array(
-                     '+1',
-                     '+1',
+                     new Comment('usera', '+1'),
+                     new Comment('userb', '+1'),
                 ),
                 'expected' => true,
             ),
             'too low' => array(
                 'comments' => array(
-                     '+1',
-                     '+1',
-                     '-1',
+                     new Comment('usera', '+1'),
+                     new Comment('userb', '+1'),
+                     new Comment('userc', '-1'),
+                ),
+                'expected' => false,
+            ),
+            'one user' => array(
+                'comments' => array(
+                     new Comment('usera', '+1'),
+                     new Comment('usera', '+1'),
+                     new Comment('usera', '+1'),
                 ),
                 'expected' => false,
             ),

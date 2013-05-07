@@ -2,6 +2,8 @@
 
 namespace PlusPull;
 
+use PlusPull\GitHub\Comment;
+
 use PlusPull\GitHub\PullRequest;
 use Github\Client;
 
@@ -80,7 +82,10 @@ class GitHub
 
         $result = array();
         foreach ($comments as $comment) {
-            $result[] = $comment['body'];
+            $result[] = new Comment(
+                $comment['user']['login'],
+                $comment['body']
+            );
         }
         return $result;
     }

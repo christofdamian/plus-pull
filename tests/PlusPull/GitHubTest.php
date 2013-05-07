@@ -2,6 +2,8 @@
 
 namespace tests\PlusPull;
 
+use PlusPull\GitHub\Comment;
+
 use PlusPull\GitHub\PullRequest;
 
 use Github\Api\Repo;
@@ -124,8 +126,19 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
     public function testGetComments()
     {
         $number = '123';
-        $commentsResult = array(array('body' => 'comment'));
-        $expected = array($commentsResult[0]['body']);
+        $commentLogin = 'usera';
+        $commentBody = 'comment';
+        $commentsResult = array(
+            array(
+                'body' => $commentBody,
+                'user' => array(
+                    'login' => $commentLogin,
+                ),
+            ),
+        );
+        $expected = array(
+            new Comment($commentLogin, $commentBody),
+        );
 
         $comments = $this->getMockBuilder('Github\Api\Issue\Comments')
             ->disableOriginalConstructor()
