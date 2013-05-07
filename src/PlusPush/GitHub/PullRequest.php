@@ -12,6 +12,11 @@ class PullRequest
 
     public $statuses = array();
 
+    /**
+     * @var boolean
+     */
+    public $isMergeable;
+
     public function checkComments($required = 3)
     {
         $total = 0;

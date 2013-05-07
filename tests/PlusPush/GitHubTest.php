@@ -60,6 +60,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $tmp->number = 123;
         $tmp->comments = array('comments');
         $tmp->statuses = array('statuses');
+        $tmp->isMergeable = true;
 
         $sha = 'sha123';
 
@@ -72,6 +73,8 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 ),
             ),
         );
+        $pullRequestFull = array( 'mergeable' => true );
+
         $expected = array($tmp);
 
         $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
@@ -85,8 +88,16 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 $this->equalTo('open')
             )
             ->will($this->returnValue($pullRequestData));
+        $pullRequest->expects($this->once())
+            ->method('show')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $this->equalTo($tmp->number)
+            )
+            ->will($this->returnValue($pullRequestFull));
 
-        $this->client->expects($this->once())
+        $this->client->expects($this->atLeastOnce())
             ->method('api')
             ->with($this->equalTo('pull_request'))
             ->will($this->returnValue($pullRequest));

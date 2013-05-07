@@ -52,6 +52,10 @@ class Show extends Command
                 $output->write(' OK');
             }
 
+            if ($pullRequest->isMergeable) {
+                $output->write(' mergeable');
+            }
+
             $output->writeln('');
         }
     }

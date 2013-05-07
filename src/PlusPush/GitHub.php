@@ -51,11 +51,18 @@ class GitHub
         foreach ($data as $row) {
             $number = $row['number'];
 
+            $full = $this->client->api('pull_request')->show(
+                $this->username,
+                $this->repository,
+                $number
+            );
+
             $pullRequest = new PullRequest();
             $pullRequest->number = $number;
             $pullRequest->title = $row['title'];
             $pullRequest->comments = $this->getComments($number);
             $pullRequest->statuses = $this->getStatuses($row['head']['sha']);
+            $pullRequest->isMergeable = $full['mergeable'];
 
             $result[] = $pullRequest;
         }
