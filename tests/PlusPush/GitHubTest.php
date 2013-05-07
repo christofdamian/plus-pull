@@ -176,4 +176,28 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($statusesResult, $this->github->getStatuses($sha));
     }
+
+    public function testMerge()
+    {
+        $number = 123;
+
+        $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pullRequest->expects($this->once())
+            ->method('merge')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $this->equalTo($number)
+            )
+            ->will($this->returnValue($pullRequestData));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('pull_request'))
+            ->will($this->returnValue($pullRequest));
+
+        $this->github->merge($number);
+    }
 }

@@ -88,4 +88,13 @@ class GitHub
             $sha
         );
     }
+
+    public function merge($number)
+    {
+        $this->client->api('pull_request')->merge(
+            $this->username,
+            $this->repository,
+            $number
+        );
+    }
 }
