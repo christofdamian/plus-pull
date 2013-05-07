@@ -8,9 +8,9 @@ class PullRequest
 
     public $title;
 
-    public $comments;
+    public $comments = array();
 
-    public $statuses;
+    public $statuses = array();
 
     public function checkComments($required = 3)
     {

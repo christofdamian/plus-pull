@@ -2,6 +2,8 @@
 
 namespace tests\PlusPush;
 
+use PlusPush\GitHub\PullRequest;
+
 use Github\Api\Repo;
 use PlusPush\GitHub;
 
@@ -49,6 +51,63 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             );
 
         $this->github->authenticate($username, $password);
+    }
+
+    public function testGetPullRequests()
+    {
+        $tmp = new PullRequest();
+        $tmp->title = 'test title';
+        $tmp->number = 123;
+        $tmp->comments = array('comments');
+        $tmp->statuses = array('statuses');
+
+        $sha = 'sha123';
+
+        $pullRequestData = array(
+            array(
+                'title' => $tmp->title,
+                'number' => $tmp->number,
+                'head' => array(
+                    'sha' => $sha,
+                ),
+            ),
+        );
+        $expected = array($tmp);
+
+        $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pullRequest->expects($this->once())
+            ->method('all')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $this->equalTo('open')
+            )
+            ->will($this->returnValue($pullRequestData));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('pull_request'))
+            ->will($this->returnValue($pullRequest));
+
+        $github = $this->getMockBuilder('PlusPush\GitHub')
+            ->setConstructorArgs(array($this->client))
+            ->setMethods(array('getComments', 'getStatuses'))
+            ->getMock();
+        $github->expects($this->once())
+            ->method('getComments')
+            ->with($this->equalTo($tmp->number))
+            ->will($this->returnValue($tmp->comments));
+        $github->expects($this->once())
+            ->method('getStatuses')
+            ->with($this->equalTo($sha))
+            ->will($this->returnValue($tmp->statuses));
+
+        $github->setRepository(self::GITHUP_USERNAME, self::GITHUB_REPOSITORY);
+
+
+        $this->assertEquals($expected, $github->getPullRequests());
     }
 
     public function testGetComments()

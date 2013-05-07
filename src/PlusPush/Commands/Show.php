@@ -2,7 +2,6 @@
 namespace PlusPush\Commands;
 
 use PlusPush\GitHub;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
@@ -27,11 +26,9 @@ class Show extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $github = new GitHub(new Client());
+        $config = $this->getYaml()->parse('config.yml');
 
-        $yaml = new Yaml();
-        $config = $yaml->parse('config.yml');
-
+        $github = $this->getGitHub();
         $github->authenticate(
             $config['authorization']['username'],
             $config['authorization']['password']
@@ -51,5 +48,15 @@ class Show extends Command
             }
             $output->writeln('');
         }
+    }
+
+    protected function getGitHub()
+    {
+        return new GitHub(new Client());
+    }
+
+    protected function getYaml()
+    {
+        return new Yaml();
     }
 }
