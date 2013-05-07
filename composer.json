@@ -1,5 +1,6 @@
 {
     "name": "cdamian/plus-pull",
+    "description": "Script to pull requests, which have enough votes",
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
