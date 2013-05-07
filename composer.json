@@ -2,6 +2,7 @@
     "name": "cdamian/plus-pull",
     "description": "Script to pull requests, which have enough votes",
     "homepage": "https://github.com/christofdamian/plus-pull",
+    "license": "MIT",
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
