@@ -1,5 +1,5 @@
 {
-    "name": "christofdamian/plus-pull",
+    "name": "cdamian/plus-pull",
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
