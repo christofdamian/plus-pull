@@ -1,7 +1,7 @@
 <?php
 namespace PlusPull;
 
-use PlusPull\Commands\Show;
+use PlusPull\Commands\Check;
 use Symfony\Component\Console\Application as SymfonyApplication;
 
 class Application extends SymfonyApplication
@@ -10,7 +10,7 @@ class Application extends SymfonyApplication
     {
         $defaultCommands = parent::getDefaultCommands();
 
-        $defaultCommands[] = new Show();
+        $defaultCommands[] = new Check();
 
         return $defaultCommands;
     }

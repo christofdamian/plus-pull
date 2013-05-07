@@ -2,16 +2,16 @@
 
 namespace tests\PlusPull\Commands;
 
-use PlusPull\Commands\Show;
+use PlusPull\Commands\Check;
 use PlusPull\GitHub\PullRequest;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ShowTest extends \PHPUnit_Framework_TestCase
+class CheckTest extends \PHPUnit_Framework_TestCase
 {
     public function testConfigure()
     {
-        $show = new Show();
-        $this->assertEquals('show', $show->getName());
+        $check = new Check();
+        $this->assertEquals('check', $check->getName());
     }
 
     public function testExecute()
@@ -46,17 +46,17 @@ class ShowTest extends \PHPUnit_Framework_TestCase
             ->method('getPullRequests')
             ->will($this->returnValue($pullRequests));
 
-        $show = $this->getMockBuilder('PlusPull\Commands\Show')
+        $check = $this->getMockBuilder('PlusPull\Commands\Check')
             ->setMethods(array('getGitHub', 'getYaml'))
             ->getMock();
-        $show->expects($this->once())
+        $check->expects($this->once())
             ->method('getGitHub')
             ->will($this->returnValue($github));
-        $show->expects($this->once())
+        $check->expects($this->once())
             ->method('getYaml')
             ->will($this->returnValue($yaml));
 
-        $tester = new CommandTester($show);
+        $tester = new CommandTester($check);
         $tester->execute(array());
     }
 }

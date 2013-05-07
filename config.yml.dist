@@ -6,3 +6,4 @@ repository:
     username: christofdamian
     name: test
     status: true
+    required: 3

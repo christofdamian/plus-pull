@@ -140,4 +140,35 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
             $this->pullRequest->getCommentValue($commentBody)
         );
     }
+
+    public function checkStatusesProvider()
+    {
+        return array(
+            'empty' => array(
+                'statuses' => null,
+                'expected' => false,
+            ),
+            'success' => array(
+                'statuses' => array(array('state' => 'success')),
+                'expected' => true,
+            ),
+            'error' => array(
+                'statuses' => array(array('state' => 'error')),
+                'expected' => false,
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider checkStatusesProvider
+     *
+     * @param array $statuses
+     * @param boolean $expected
+     */
+    public function testCheckStatuses($statuses, $expected)
+    {
+        $this->pullRequest->statuses = $statuses;
+        $this->assertEquals($expected, $this->pullRequest->checkStatuses());
+    }
+
 }

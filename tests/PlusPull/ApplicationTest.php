@@ -9,6 +9,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testAllCommands()
     {
         $application = new Application();
-        $this->assertTrue($application->has('show'));
+        $this->assertTrue($application->has('check'));
     }
 }

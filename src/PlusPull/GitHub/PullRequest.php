@@ -49,4 +49,13 @@ class PullRequest
         }
         return 0;
     }
+
+    public function checkStatuses()
+    {
+        if (empty($this->statuses[0]['state'])) {
+            return false;
+        }
+
+        return $this->statuses[0]['state']=='success';
+    }
 }

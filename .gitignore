@@ -13,4 +13,5 @@
 # artifacts
 /config.yml
 *~
+*.bak
 
