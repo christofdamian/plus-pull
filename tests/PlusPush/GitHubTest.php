@@ -2,6 +2,7 @@
 
 namespace tests\PlusPush;
 
+use Github\Api\Repo;
 use PlusPush\GitHub;
 
 class GitHubTests extends \PHPUnit_Framework_TestCase
@@ -41,5 +42,41 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             );
 
         $this->github->authenticate($username, $password);
+    }
+
+    public function testGetStatuses()
+    {
+        $sha = 'sha123';
+        $statusesResult = array('statuses');
+        $username = 'testuser';
+        $repository = 'test-repsitory';
+
+        $statuses = $this->getMockBuilder('Github\Api\Repository\Statuses')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $statuses->expects($this->once())
+            ->method('show')
+            ->with(
+                $this->equalTo($username),
+                $this->equalTo($repository),
+                $this->equalTo($sha)
+            )
+            ->will($this->returnValue($statusesResult));
+
+        $repo = $this->getMockBuilder('Github\Api\Repo')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $repo->expects($this->once())
+            ->method('statuses')
+            ->will($this->returnValue($statuses));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('repos'))
+            ->will($this->returnValue($repo));
+
+        $this->github->setRepository($username, $repository);
+
+        $this->assertEquals($statusesResult, $this->github->getStatuses($sha));
     }
 }
