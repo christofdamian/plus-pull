@@ -11,6 +11,9 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
     private $github;
 
+    const GITHUP_USERNAME = 'testuser';
+    const GITHUB_REPOSITORY = 'test-repository';
+
     public function setUp()
     {
         $this->client = $this->getMockBuilder('Github\Client')
@@ -18,6 +21,10 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->github = new GitHub($this->client);
+        $this->github->setRepository(
+            self::GITHUP_USERNAME,
+            self::GITHUB_REPOSITORY
+        );
     }
 
     public function testAuthenticate()
@@ -44,12 +51,44 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $this->github->authenticate($username, $password);
     }
 
+    public function testGetComments()
+    {
+        $number = '123';
+        $commentsResult = array(array('body' => 'comment'));
+        $expected = array($commentsResult[0]['body']);
+
+        $comments = $this->getMockBuilder('Github\Api\Issue\Comments')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $comments->expects($this->once())
+            ->method('all')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $this->equalTo($number)
+            )
+            ->will($this->returnValue($commentsResult));
+
+        $issue = $this->getMockBuilder('Github\Api\Issue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $issue->expects($this->once())
+            ->method('comments')
+            ->will($this->returnValue($comments));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('issues'))
+            ->will($this->returnValue($issue));
+
+
+        $this->assertEquals($expected, $this->github->getComments($number));
+    }
+
     public function testGetStatuses()
     {
         $sha = 'sha123';
         $statusesResult = array('statuses');
-        $username = 'testuser';
-        $repository = 'test-repsitory';
 
         $statuses = $this->getMockBuilder('Github\Api\Repository\Statuses')
             ->disableOriginalConstructor()
@@ -57,8 +96,8 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $statuses->expects($this->once())
             ->method('show')
             ->with(
-                $this->equalTo($username),
-                $this->equalTo($repository),
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
                 $this->equalTo($sha)
             )
             ->will($this->returnValue($statusesResult));
@@ -75,7 +114,6 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('repos'))
             ->will($this->returnValue($repo));
 
-        $this->github->setRepository($username, $repository);
 
         $this->assertEquals($statusesResult, $this->github->getStatuses($sha));
     }
