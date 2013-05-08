@@ -10,16 +10,29 @@ By default these requirements are:
 3. the request is mergeable
 4. (optionally) all build statuses are OK
 
-install
+Install
 -------
-
 composer.phar create-project cdamian/plus-pull
 
-Command Line Options
---------------------
-*--pull* only with this option the request will be pulled
+Command Line Usage
+------------------
+    
+     check [-p|--pull] [-l|--limit="..."] [config-file]
 
-*--limit <number>* pull a maximum number of requests
+    Arguments:
+     config-file           Path of the yaml configuration file (default: "config.yml")
+
+    Options:
+     --pull (-p)           Pull the request if all conditions are met
+     --limit (-l)          Maximum numbers of pull (default: 1)
+     --help (-h)           Display this help message.
+     --quiet (-q)          Do not output any message.
+     --verbose (-v)        Increase verbosity of messages.
+     --version (-V)        Display this application version.
+     --ansi                Force ANSI output.
+     --no-ansi             Disable ANSI output.
+     --no-interaction (-n) Do not ask any interactive question.
+
 
 
 Credits
