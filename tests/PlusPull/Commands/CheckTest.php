@@ -85,6 +85,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->method('checkStatuses')
             ->will($this->returnValue($checkStatuses));
 
+        $configFile = 'test-config.yml';
 
         $pullRequests = array(
             $pullRequest,
@@ -109,6 +110,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $yaml->staticExpects($this->any())
             ->method('parse')
+            ->with($this->equalTo($configFile))
             ->will($this->returnValue($config));
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
@@ -130,6 +132,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($yaml));
 
         $tester = new CommandTester($check);
+
+        $input['config-file'] = $configFile;
         $tester->execute($input);
     }
 }
