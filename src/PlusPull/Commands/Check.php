@@ -5,6 +5,7 @@ use Github\Client;
 use PlusPull\GitHub;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\Input;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
@@ -18,6 +19,12 @@ class Check extends Command
     {
         $this->setName('check');
         $this->setDescription('Check pull requests');
+        $this->addArgument(
+            'config-file',
+            InputArgument::OPTIONAL,
+            'Path of the yaml configuration file',
+            'config.yml'
+        );
         $this->addOption(
             'pull',
             'p',
@@ -35,7 +42,7 @@ class Check extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = $this->getYaml()->parse('config.yml');
+        $config = $this->getYaml()->parse($input->getArgument('config-file'));
 
         if (!is_array($config) || empty($config)) {
             throw new \InvalidArgumentException('Empty or missing config file');
