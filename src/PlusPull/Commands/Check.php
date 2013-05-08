@@ -82,7 +82,7 @@ class Check extends Command
                 }
             }
 
-            if ($pullRequest->isMergeable) {
+            if ($pullRequest->isMergeable()) {
                 $output->write(' mergeable');
             } else {
                 $output->write(' conflicts');

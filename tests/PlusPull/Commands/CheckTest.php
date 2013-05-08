@@ -14,10 +14,81 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('check', $check->getName());
     }
 
-    public function testExecute()
+    public function executeProvider()
     {
+        return array(
+            'all ok' => array(
+                'input' => array('--pull' => true, '--limit' => 10),
+                'checkComments' => true,
+                'isMergeable' => true,
+                'checkStatuses' => true,
+                'mergeCount' => 2,
+             ),
+            'limit' => array(
+                'input' => array('--pull' => true, '--limit' => 1),
+                'checkComments' => true,
+                'isMergeable' => true,
+                'checkStatuses' => true,
+                'mergeCount' => 1,
+             ),
+            '-1' => array(
+                'input' => array('--pull' => true),
+                'checkComments' => false,
+                'isMergeable' => true,
+                'checkStatuses' => true,
+                'mergeCount' => 0,
+             ),
+            'unmergeable' => array(
+                'input' => array('--pull' => true),
+                'checkComments' => true,
+                'isMergeable' => false,
+                'checkStatuses' => true,
+                'mergeCount' => 0,
+             ),
+            'fail' => array(
+                'input' => array('--pull' => true),
+                'checkComments' => true,
+                'isMergeable' => true,
+                'checkStatuses' => false,
+                'mergeCount' => 0,
+             ),
+        );
+    }
+
+    /**
+     * @dataProvider executeProvider
+     *
+     * @param boolean $checkComments
+     * @param boolean $isMergeable
+     * @param boolean $checkStatuses
+     * @param integer $mergeCount
+     */
+    public function testExecute(
+        $input,
+        $checkComments,
+        $isMergeable,
+        $checkStatuses,
+        $mergeCount
+    )
+    {
+        $required = 3;
+
+        $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
+        $pullRequest->expects($this->atLeastOnce())
+            ->method('checkComments')
+            ->with($this->equalTo($required))
+            ->will($this->returnValue($checkComments));
+        $pullRequest->expects($this->atLeastOnce())
+            ->method('isMergeable')
+            ->will($this->returnValue($isMergeable));
+        $pullRequest->expects($this->atLeastOnce())
+            ->method('checkStatuses')
+            ->will($this->returnValue($checkStatuses));
+
+
         $pullRequests = array(
-            new PullRequest()
+            $pullRequest,
+            $pullRequest,
         );
 
         $config = array(
@@ -28,7 +99,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             'repository' => array(
                 'name' => 'test-repo',
                 'username' => 'test-owner',
-                'status' => false,
+                'status' => true,
+                'required' => $required,
             ),
         );
 
@@ -45,6 +117,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $github->expects($this->once())
             ->method('getPullRequests')
             ->will($this->returnValue($pullRequests));
+        $github->expects($this->exactly($mergeCount))->method('merge');
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
             ->setMethods(array('getGitHub', 'getYaml'))
@@ -57,6 +130,6 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($yaml));
 
         $tester = new CommandTester($check);
-        $tester->execute(array());
+        $tester->execute($input);
     }
 }

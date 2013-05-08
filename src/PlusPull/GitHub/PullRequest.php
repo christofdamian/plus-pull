@@ -58,4 +58,9 @@ class PullRequest
 
         return $this->statuses[0]['state']=='success';
     }
+
+    public function isMergeable()
+    {
+        return $this->isMergeable;
+    }
 }
