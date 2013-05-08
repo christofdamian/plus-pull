@@ -16,6 +16,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
+        $configFile = 'test-config.yml';
+
         $pullRequests = array(
             new PullRequest()
         );
@@ -37,6 +39,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $yaml->staticExpects($this->any())
             ->method('parse')
+            ->with($this->equalTo($configFile))
             ->will($this->returnValue($config));
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
@@ -57,6 +60,6 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($yaml));
 
         $tester = new CommandTester($check);
-        $tester->execute(array());
+        $tester->execute(array('config-file' => $configFile));
     }
 }
