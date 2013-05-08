@@ -10,6 +10,11 @@ By default these requirements are:
 3. the request is mergeable
 4. (optionally) all build statuses are OK
 
+install
+-------
+
+composer.phar create-project cdamian/plus-pull
+
 Command Line Options
 --------------------
 *--pull* only with this option the request will be pulled
