@@ -64,6 +64,11 @@ class Check extends Command
             $plusRequired = $config['repository']['required'];
         }
 
+        $whitelist = null;
+        if (!empty($config['repository']['whitelist'])) {
+            $whitelist = $config['repository']['whitelist'];
+        }
+
         $maxPulls = $input->getOption('limit');
 
         $github->setRepository($username, $repository);
@@ -73,7 +78,7 @@ class Check extends Command
 
             $output->write($pullRequest->number.' ('.$pullRequest->title.')');
 
-            if ($pullRequest->checkComments($plusRequired)) {
+            if ($pullRequest->checkComments($plusRequired, $whitelist)) {
                 $output->write(' +1');
             } else {
                 $output->write(' -1');
