@@ -23,6 +23,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                 'comments' => array(
                      new Comment('usera', '[B]'),
                 ),
+                'whitelist' => null,
                 'expected' => false,
             ),
             'ok' => array(
@@ -30,6 +31,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                      new Comment('usera', '+1'),
                      new Comment('userb', '+1'),
                 ),
+                'whitelist' => null,
                 'expected' => true,
             ),
             'too low' => array(
@@ -38,6 +40,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                      new Comment('userb', '+1'),
                      new Comment('userc', '-1'),
                 ),
+                'whitelist' => null,
                 'expected' => false,
             ),
             'one user' => array(
@@ -46,7 +49,24 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                      new Comment('usera', '+1'),
                      new Comment('usera', '+1'),
                 ),
+                'whitelist' => null,
                 'expected' => false,
+            ),
+            'whitelist ok' => array(
+                'comments' => array(
+                     new Comment('usera', '+1'),
+                     new Comment('userb', '+1'),
+                ),
+                'whitelist' => array('usera', 'userb'),
+                'expected' => true,
+            ),
+            'whitelist ko' => array(
+                'comments' => array(
+                     new Comment('usera', '+1'),
+                     new Comment('userb', '+1'),
+                ),
+                'whitelist' => array('usera'),
+                'expected' => true,
             ),
         );
     }
@@ -56,9 +76,10 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
      * @dataProvider checkCommentsProvider
      *
      * @param array $comments
+     * @param array $whitelist
      * @param boolean $expected
      */
-    public function testCheckComments($comments, $expected)
+    public function testCheckComments($comments, $whitelist, $expected)
     {
         $this->pullRequest->comments = $comments;
 
@@ -169,6 +190,11 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->pullRequest->statuses = $statuses;
         $this->assertEquals($expected, $this->pullRequest->checkStatuses());
+    }
+
+    public function testIsMergeable()
+    {
+        $this->assertFalse($this->pullRequest->isMergeable());
     }
 
 }

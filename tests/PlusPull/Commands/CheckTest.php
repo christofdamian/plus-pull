@@ -72,11 +72,12 @@ class CheckTest extends \PHPUnit_Framework_TestCase
     )
     {
         $required = 3;
+        $whitelist = array('usera');
 
         $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
         $pullRequest->expects($this->atLeastOnce())
             ->method('checkComments')
-            ->with($this->equalTo($required))
+            ->with($this->equalTo($required), $this->equalTo($whitelist))
             ->will($this->returnValue($checkComments));
         $pullRequest->expects($this->atLeastOnce())
             ->method('isMergeable')
@@ -102,6 +103,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'username' => 'test-owner',
                 'status' => true,
                 'required' => $required,
+                'whitelist' => $whitelist,
             ),
         );
 
