@@ -69,8 +69,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $isMergeable,
         $checkStatuses,
         $mergeCount
-    )
-    {
+    ) {
         $required = 3;
         $whitelist = array('usera');
 
