@@ -33,7 +33,27 @@ Command Line Usage
      --no-ansi             Disable ANSI output.
      --no-interaction (-n) Do not ask any interactive question.
 
+Configuration File
+------------------
 
+With the config file you can set the github authorization username and 
+password.
+The other section sets the repository owner and name and you can change
+the defaults for needed votes, if status will be checked and voter 
+whitelist.
+
+```yaml
+authorization:
+    username: christofdamian
+    password: secret
+
+repository:
+    username: christofdamian
+    name: test
+    status: true
+    required: 3
+    whitelist: [ christofdamian ]
+```
 
 Credits
 -------
