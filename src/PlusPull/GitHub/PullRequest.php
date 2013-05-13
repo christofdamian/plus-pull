@@ -15,18 +15,24 @@ class PullRequest
     /**
      * @var boolean
      */
-    public $isMergeable;
+    public $isMergeable = false;
 
-    public function checkComments($required = 3)
+    public function checkComments($required = 3, $whitelist = null)
     {
         $voted = array();
         $total = 0;
         foreach ($this->comments as $comment) {
+            $login = $comment->login;
+            if ($whitelist && !in_array($login, $whitelist)) {
+                continue;
+            }
+
             if ($this->isBlocker($comment->body)) {
                 return false;
             }
 
-            if (empty($voted[$comment->login])) {
+
+            if (empty($voted[$login])) {
                 $total += $this->getCommentValue($comment->body);
                 $voted[$comment->login] = true;
             }

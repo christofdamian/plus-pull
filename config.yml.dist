@@ -7,3 +7,4 @@ repository:
     name: test
     status: true
     required: 3
+    whitelist: [ christofdamian ]
