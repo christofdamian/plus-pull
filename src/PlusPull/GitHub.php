@@ -107,4 +107,15 @@ class GitHub
             $number
         );
     }
+
+    public function createToken()
+    {
+        $result = $this->client->api('authorizations')->create(
+            array(
+                'note' => 'plus-push',
+                'note_url' => 'https://github.com/christofdamian/plus-pull',
+            )
+        );
+        return $result['token'];
+    }
 }

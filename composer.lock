@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3643d3098be5110b13fe22279fbd37af",
+    "hash": "41aea78215c4432c9c50e9a09be9bedc",
     "packages": [
         {
             "name": "knplabs/github-api",
-            "version": "dev-master",
+            "version": "dev-authorizations",
             "source": {
                 "type": "git",
-                "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "8eafe2ec512a0cbcdf5accc85f6a8cf01df787a2"
+                "url": "https://github.com/christofdamian/php-github-api.git",
+                "reference": "300c7904c4feef0a855d99ec13233d6586d28c31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/8eafe2ec512a0cbcdf5accc85f6a8cf01df787a2",
-                "reference": "8eafe2ec512a0cbcdf5accc85f6a8cf01df787a2",
+                "url": "https://api.github.com/repos/christofdamian/php-github-api/zipball/300c7904c4feef0a855d99ec13233d6586d28c31",
+                "reference": "300c7904c4feef0a855d99ec13233d6586d28c31",
                 "shasum": ""
             },
             "require": {
@@ -35,19 +35,18 @@
                     "Github\\": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
+                    "name": "KnpLabs Team",
+                    "homepage": "http://knplabs.com"
+                },
+                {
                     "name": "Thibault Duplessis",
                     "email": "thibault.duplessis@gmail.com",
                     "homepage": "http://ornicar.github.com"
-                },
-                {
-                    "name": "KnpLabs Team",
-                    "homepage": "http://knplabs.com"
                 }
             ],
             "description": "GitHub API v3 client",
@@ -58,7 +57,10 @@
                 "gist",
                 "github"
             ],
-            "time": "2013-04-01 07:38:45"
+            "support": {
+                "source": "https://github.com/christofdamian/php-github-api/tree/authorizations"
+            },
+            "time": "2013-05-14 22:21:54"
         },
         {
             "name": "kriswallsmith/buzz",
@@ -437,16 +439,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.19",
+            "version": "3.7.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3.7.19"
+                "reference": "3.7.20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.19",
-                "reference": "3.7.19",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.20",
+                "reference": "3.7.20",
                 "shasum": ""
             },
             "require": {
@@ -460,7 +462,7 @@
                 "phpunit/php-text-template": ">=1.1.1",
                 "phpunit/php-timer": ">=1.0.2,<1.1.0",
                 "phpunit/phpunit-mock-objects": ">=1.2.0,<1.3.0",
-                "symfony/yaml": ">=2.0.0,<2.3.0"
+                "symfony/yaml": ">=2.0,<3.0"
             },
             "require-dev": {
                 "pear-pear/pear": "1.9.4"
@@ -507,7 +509,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-03-25 11:45:06"
+            "time": "2013-05-13 06:06:41"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

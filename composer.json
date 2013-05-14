@@ -3,10 +3,18 @@
     "description": "Script to merge Github pull requests, which have enough +1 votes",
     "homepage": "https://github.com/christofdamian/plus-pull",
     "license": "MIT",
+
+   "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:christofdamian/php-github-api"
+        }
+    ],
+
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
-        "knplabs/github-api": "*@dev"
+        "knplabs/github-api": "dev-authorizations"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
