@@ -17,20 +17,28 @@ class GitHub
     public function __construct(Client $client)
     {
         $this->client = $client;
-    }
-
-    public function authenticate($username, $password)
-    {
         $this->client->getHttpClient()->setHeaders(
             array(
                 'User-Agent' => 'christofdamian/plus-pull',
             )
         );
+    }
 
+    public function authenticate($username, $password)
+    {
         $this->client->authenticate(
             $username,
             $password,
             Client::AUTH_HTTP_PASSWORD
+        );
+    }
+
+    public function authenticateWithToken($token)
+    {
+        $this->client->authenticate(
+            $token,
+            null,
+            Client::AUTH_HTTP_TOKEN
         );
     }
 
@@ -108,11 +116,11 @@ class GitHub
         );
     }
 
-    public function createToken()
+    public function createToken($note)
     {
         $result = $this->client->api('authorizations')->create(
             array(
-                'note' => 'plus-push',
+                'note' => $note,
                 'note_url' => 'https://github.com/christofdamian/plus-pull',
             )
         );
