@@ -1,18 +1,14 @@
 <?php
 namespace PlusPull\Commands;
 
-use Github\Client;
-use PlusPull\GitHub;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
-class Check extends Command
+class Check extends AbstractCommand
 {
 
     protected function configure()
@@ -50,10 +46,14 @@ class Check extends Command
 
         $github = $this->getGitHub();
 
-        $github->authenticate(
-            $config['authorization']['username'],
-            $config['authorization']['password']
-        );
+        if (!empty($config['authorization']['token'])) {
+            $github->authenticateWithToken($config['authorization']['token']);
+        } else {
+            $github->authenticate(
+                $config['authorization']['username'],
+                $config['authorization']['password']
+            );
+        }
 
         $username = $config['repository']['username'];
         $repository = $config['repository']['name'];
@@ -113,15 +113,5 @@ class Check extends Command
                 break;
             }
         }
-    }
-
-    protected function getGitHub()
-    {
-        return new GitHub(new Client());
-    }
-
-    protected function getYaml()
-    {
-        return new Yaml();
     }
 }

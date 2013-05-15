@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "67246b4d069e43852b81a0567b87eeba",
+    "hash": "59da77fa3757b61b2ac1b2a24ce180b1",
     "packages": [
         {
             "name": "knplabs/github-api",
-            "version": "dev-master",
+            "version": "dev-authorizations",
             "source": {
                 "type": "git",
-                "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "8eafe2ec512a0cbcdf5accc85f6a8cf01df787a2"
+                "url": "https://github.com/christofdamian/php-github-api.git",
+                "reference": "32b6ff31dae9a08412fb7ccbacf326fee21d4f90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/8eafe2ec512a0cbcdf5accc85f6a8cf01df787a2",
-                "reference": "8eafe2ec512a0cbcdf5accc85f6a8cf01df787a2",
+                "url": "https://api.github.com/repos/christofdamian/php-github-api/zipball/32b6ff31dae9a08412fb7ccbacf326fee21d4f90",
+                "reference": "32b6ff31dae9a08412fb7ccbacf326fee21d4f90",
                 "shasum": ""
             },
             "require": {
@@ -35,19 +35,18 @@
                     "Github\\": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
+                    "name": "KnpLabs Team",
+                    "homepage": "http://knplabs.com"
+                },
+                {
                     "name": "Thibault Duplessis",
                     "email": "thibault.duplessis@gmail.com",
                     "homepage": "http://ornicar.github.com"
-                },
-                {
-                    "name": "KnpLabs Team",
-                    "homepage": "http://knplabs.com"
                 }
             ],
             "description": "GitHub API v3 client",
@@ -58,7 +57,10 @@
                 "gist",
                 "github"
             ],
-            "time": "2013-04-01 07:38:45"
+            "support": {
+                "source": "https://github.com/christofdamian/php-github-api/tree/authorizations"
+            },
+            "time": "2013-05-14 23:00:17"
         },
         {
             "name": "kriswallsmith/buzz",
