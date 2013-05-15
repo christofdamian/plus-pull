@@ -64,7 +64,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 $this->equalTo($token),
                 $this->isNull(),
                 $this->equalTo(\Github\Client::AUTH_HTTP_TOKEN)
-        );
+            );
 
         $this->github->authenticateWithToken($token);
     }
@@ -265,5 +265,4 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($token, $this->github->createToken($note));
     }
-
 }

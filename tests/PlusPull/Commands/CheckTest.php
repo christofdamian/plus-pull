@@ -23,35 +23,48 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'isMergeable' => true,
                 'checkStatuses' => true,
                 'mergeCount' => 2,
+                'token' => null,
              ),
-            'limit' => array(
+            'all ok + token' => array(
+                'input' => array('--pull' => true, '--limit' => 10),
+                'checkComments' => true,
+                'isMergeable' => true,
+                'checkStatuses' => true,
+                'mergeCount' => 2,
+                'token' => 'token123',
+             ),
+             'limit' => array(
                 'input' => array('--pull' => true, '--limit' => 1),
                 'checkComments' => true,
                 'isMergeable' => true,
                 'checkStatuses' => true,
                 'mergeCount' => 1,
-             ),
+                'token' => null,
+            ),
             '-1' => array(
                 'input' => array('--pull' => true),
                 'checkComments' => false,
                 'isMergeable' => true,
                 'checkStatuses' => true,
                 'mergeCount' => 0,
-             ),
+                'token' => null,
+            ),
             'unmergeable' => array(
                 'input' => array('--pull' => true),
                 'checkComments' => true,
                 'isMergeable' => false,
                 'checkStatuses' => true,
                 'mergeCount' => 0,
-             ),
+                'token' => null,
+            ),
             'fail' => array(
                 'input' => array('--pull' => true),
                 'checkComments' => true,
                 'isMergeable' => true,
                 'checkStatuses' => false,
                 'mergeCount' => 0,
-             ),
+                'token' => null,
+            ),
         );
     }
 
@@ -62,16 +75,20 @@ class CheckTest extends \PHPUnit_Framework_TestCase
      * @param boolean $isMergeable
      * @param boolean $checkStatuses
      * @param integer $mergeCount
+     * @param string $token
      */
     public function testExecute(
         $input,
         $checkComments,
         $isMergeable,
         $checkStatuses,
-        $mergeCount
+        $mergeCount,
+        $token
     ) {
         $required = 3;
         $whitelist = array('usera');
+        $username = 'user';
+        $password = 'pass';
 
         $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
         $pullRequest->expects($this->atLeastOnce())
@@ -94,8 +111,9 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
         $config = array(
             'authorization' => array(
-                'username' => 'testuser',
-                'password' => 'secret',
+                'username' => $username,
+                'password' => $password,
+                'token'    => $token,
             ),
             'repository' => array(
                 'name' => 'test-repo',
@@ -117,6 +135,17 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->disableOriginalConstructor()
             ->getMock();
+
+        if ($token) {
+            $github->expects($this->once())
+                ->method('authenticateWithToken')
+                ->with($this->equalTo($token));
+        } else {
+            $github->expects($this->once())
+                ->method('authenticate')
+                ->with($this->equalTo($username), $this->equalTo($password));
+        }
+
         $github->expects($this->once())
             ->method('getPullRequests')
             ->will($this->returnValue($pullRequests));
@@ -136,5 +165,32 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
         $input['config-file'] = $configFile;
         $tester->execute($input);
+    }
+
+    public function testExecuteMissingConfig()
+    {
+        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
+            ->disableOriginalConstructor()
+            ->setMethods(array('parse'))
+            ->getMock();
+
+        $check = $this->getMockBuilder('PlusPull\Commands\Check')
+            ->setMethods(array('getYaml'))
+            ->getMock();
+        $check->expects($this->once())
+            ->method('getYaml')
+            ->will($this->returnValue($yaml));
+
+        $tester = new CommandTester($check);
+
+        try {
+            $tester->execute(array());
+            $this->fail('Expected InvalidArgumentException');
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals(
+                'Empty or missing config file',
+                $e->getMessage()
+            );
+        }
     }
 }

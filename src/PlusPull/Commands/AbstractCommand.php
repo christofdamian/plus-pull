@@ -6,6 +6,9 @@ use PlusPull\GitHub;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class AbstractCommand extends Command
 {
     protected function getGitHub()
