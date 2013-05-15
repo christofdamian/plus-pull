@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="plus-pull" default="build">
+
+    <target name="build">
+        <antcall target="phpunit"/>
+        <antcall target="phpcs"/>
+    </target>
+
+    <target name="phpunit">
+        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+        </exec>
+    </target>
+
+    <target name="phpcs">
+        <exec executable="${basedir}/vendor/bin/phpcs" failonerror="true">
+            <arg value="--standard=${basedir}/phpcs.xml"/>
+            <arg path="src" />
+            <arg path="tests" />
+            <arg path="bin" />
+        </exec>
+    </target>
+
+</project>
