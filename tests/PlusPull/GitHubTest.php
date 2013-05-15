@@ -55,6 +55,20 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $this->github->authenticate($username, $password);
     }
 
+    public function testAuthenticateWithToken()
+    {
+        $token = 'token123';
+        $this->client->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                $this->equalTo($token),
+                $this->isNull(),
+                $this->equalTo(\Github\Client::AUTH_HTTP_TOKEN)
+        );
+
+        $this->github->authenticateWithToken($token);
+    }
+
     public function testGetPullRequests()
     {
         $tmp = new PullRequest();
@@ -223,4 +237,33 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $this->github->merge($number);
     }
+
+    public function testCreateToken()
+    {
+        $token = 'token123';
+        $note = 'some note';
+
+        $authorizations = $this->getMockBuilder('Github\Api\Authorizations')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $authorizations->expects($this->once())
+            ->method('create')
+            ->with(
+                $this->equalTo(
+                    array(
+                        'note' => $note,
+                        'note_url' => GitHub::NOTE_URL,
+                    )
+                )
+            )
+            ->will($this->returnValue(array('token' => $token)));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('authorizations'))
+            ->will($this->returnValue($authorizations));
+
+        $this->assertEquals($token, $this->github->createToken($note));
+    }
+
 }

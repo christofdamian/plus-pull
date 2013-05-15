@@ -9,6 +9,10 @@ use Github\Client;
 
 class GitHub
 {
+    const NOTE_URL = 'https://github.com/christofdamian/plus-pull';
+    const USER_AGENT = 'christofdamian/plus-pull';
+
+
     private $client;
 
     private $username;
@@ -19,7 +23,7 @@ class GitHub
         $this->client = $client;
         $this->client->getHttpClient()->setHeaders(
             array(
-                'User-Agent' => 'christofdamian/plus-pull',
+                'User-Agent' => self::USER_AGENT,
             )
         );
     }
@@ -121,7 +125,7 @@ class GitHub
         $result = $this->client->api('authorizations')->create(
             array(
                 'note' => $note,
-                'note_url' => 'https://github.com/christofdamian/plus-pull',
+                'note_url' => self::NOTE_URL,
             )
         );
         return $result['token'];
