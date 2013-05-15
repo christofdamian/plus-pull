@@ -24,6 +24,14 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $httpClient = $this->getMock('Github\HttpClient\HttpClient');
+        $httpClient->expects($this->atLeastOnce())
+            ->method('setHeaders');
+
+        $this->client->expects($this->atLeastOnce())
+            ->method('getHttpClient')
+            ->will($this->returnValue($httpClient));
+
         $this->github = new GitHub($this->client);
         $this->github->setRepository(
             self::GITHUP_USERNAME,
@@ -36,14 +44,6 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $username = 'username';
         $password = 'password';
 
-        $httpClient = $this->getMock('Github\HttpClient\HttpClient');
-        $httpClient->expects($this->once())
-            ->method('setHeaders');
-
-        $this->client->expects($this->once())
-            ->method('getHttpClient')
-            ->will($this->returnValue($httpClient));
-
         $this->client->expects($this->once())
             ->method('authenticate')
             ->with(
@@ -53,6 +53,20 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             );
 
         $this->github->authenticate($username, $password);
+    }
+
+    public function testAuthenticateWithToken()
+    {
+        $token = 'token123';
+        $this->client->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                $this->equalTo($token),
+                $this->isNull(),
+                $this->equalTo(\Github\Client::AUTH_HTTP_TOKEN)
+            );
+
+        $this->github->authenticateWithToken($token);
     }
 
     public function testGetPullRequests()
@@ -222,5 +236,33 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($pullRequest));
 
         $this->github->merge($number);
+    }
+
+    public function testCreateToken()
+    {
+        $token = 'token123';
+        $note = 'some note';
+
+        $authorizations = $this->getMockBuilder('Github\Api\Authorizations')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $authorizations->expects($this->once())
+            ->method('create')
+            ->with(
+                $this->equalTo(
+                    array(
+                        'note' => $note,
+                        'note_url' => GitHub::NOTE_URL,
+                    )
+                )
+            )
+            ->will($this->returnValue(array('token' => $token)));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('authorizations'))
+            ->will($this->returnValue($authorizations));
+
+        $this->assertEquals($token, $this->github->createToken($note));
     }
 }

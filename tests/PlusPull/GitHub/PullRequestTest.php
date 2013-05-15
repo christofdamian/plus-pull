@@ -66,7 +66,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                      new Comment('userb', '+1'),
                 ),
                 'whitelist' => array('usera'),
-                'expected' => true,
+                'expected' => false,
             ),
         );
     }
@@ -85,7 +85,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expected,
-            $this->pullRequest->checkComments(2)
+            $this->pullRequest->checkComments(2, $whitelist)
         );
     }
 
