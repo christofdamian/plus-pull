@@ -24,6 +24,14 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $httpClient = $this->getMock('Github\HttpClient\HttpClient');
+        $httpClient->expects($this->atLeastOnce())
+            ->method('setHeaders');
+
+        $this->client->expects($this->atLeastOnce())
+            ->method('getHttpClient')
+            ->will($this->returnValue($httpClient));
+
         $this->github = new GitHub($this->client);
         $this->github->setRepository(
             self::GITHUP_USERNAME,
@@ -35,14 +43,6 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
     {
         $username = 'username';
         $password = 'password';
-
-        $httpClient = $this->getMock('Github\HttpClient\HttpClient');
-        $httpClient->expects($this->once())
-            ->method('setHeaders');
-
-        $this->client->expects($this->once())
-            ->method('getHttpClient')
-            ->will($this->returnValue($httpClient));
 
         $this->client->expects($this->once())
             ->method('authenticate')
