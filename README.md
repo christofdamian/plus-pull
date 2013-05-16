@@ -16,8 +16,10 @@ composer.phar create-project cdamian/plus-pull
 
 Command Line Usage
 ------------------
-    
-     check [-p|--pull] [-l|--limit="..."] [config-file]
+
+Check pull requests:
+
+    check [-p|--pull] [-l|--limit="..."] [config-file]
 
     Arguments:
      config-file           Path of the yaml configuration file (default: "config.yml")
@@ -25,19 +27,21 @@ Command Line Usage
     Options:
      --pull (-p)           Pull the request if all conditions are met
      --limit (-l)          Maximum numbers of pull (default: 1)
-     --help (-h)           Display this help message.
-     --quiet (-q)          Do not output any message.
-     --verbose (-v)        Increase verbosity of messages.
-     --version (-V)        Display this application version.
-     --ansi                Force ANSI output.
-     --no-ansi             Disable ANSI output.
-     --no-interaction (-n) Do not ask any interactive question.
+
+Create a new github authorization token:
+
+    token:create [--note="..."]
+
+    Options:
+     --note                Note for the authorization token on github (default: "plus-push")
+
 
 Configuration File
 ------------------
 
 With the config file you can set the github authorization username and 
-password.
+password or an github authorizisation token.
+
 The other section sets the repository owner and name and you can change
 the defaults for needed votes, if status will be checked and voter 
 whitelist.
@@ -46,6 +50,7 @@ whitelist.
 authorization:
     username: christofdamian
     password: secret
+    token: githubtoken
 
 repository:
     username: christofdamian

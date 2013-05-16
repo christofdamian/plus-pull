@@ -1,6 +1,7 @@
 authorization:
     username: christofdamian
     password: secret
+    token: githubtoken
 
 repository:
     username: christofdamian
