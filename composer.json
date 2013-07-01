@@ -4,17 +4,10 @@
     "homepage": "https://github.com/christofdamian/plus-pull",
     "license": "MIT",
 
-   "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:christofdamian/php-github-api"
-        }
-    ],
-
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
-        "knplabs/github-api": "dev-authorizations"
+        "knplabs/github-api": "*@dev"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.4.*",
