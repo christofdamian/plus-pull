@@ -7,7 +7,7 @@
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
-        "knplabs/github-api": "*@dev"
+        "knplabs/github-api": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.4.*",
