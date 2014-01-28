@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.1
+-----
+* fix token creation and authentification
+
 0.5.0
 -----
 * allow more than one repository in the config file

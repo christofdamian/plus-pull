@@ -41,7 +41,6 @@ class GitHub
     {
         $this->client->authenticate(
             $token,
-            null,
             Client::AUTH_HTTP_TOKEN
         );
     }
@@ -126,6 +125,7 @@ class GitHub
             array(
                 'note' => $note,
                 'note_url' => self::NOTE_URL,
+                'scopes' => array('repo'),
             )
         );
         return $result['token'];
