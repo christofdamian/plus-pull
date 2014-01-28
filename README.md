@@ -52,12 +52,13 @@ authorization:
     password: secret
     token: githubtoken
 
-repository:
-    username: christofdamian
-    name: test
-    status: true
-    required: 3
-    whitelist: [ christofdamian ]
+repositories:
+    -
+        username: christofdamian
+        name: test
+        status: true
+        required: 3
+        whitelist: [ christofdamian ]
 ```
 
 Credits

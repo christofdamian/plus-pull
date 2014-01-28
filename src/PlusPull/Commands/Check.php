@@ -55,63 +55,74 @@ class Check extends AbstractCommand
             );
         }
 
-        $username = $config['repository']['username'];
-        $repository = $config['repository']['name'];
-        $checkStatus = !empty($config['repository']['status']);
-
-        $plusRequired = 3;
-        if (!empty($config['repository']['required'])) {
-            $plusRequired = $config['repository']['required'];
-        }
-
-        $whitelist = null;
-        if (!empty($config['repository']['whitelist'])) {
-            $whitelist = $config['repository']['whitelist'];
-        }
-
         $maxPulls = $input->getOption('limit');
 
-        $github->setRepository($username, $repository);
-
-        foreach ($github->getPullRequests() as $pullRequest) {
-            $pull = $input->getOption('pull');
-
-            $output->write($pullRequest->number.' ('.$pullRequest->title.')');
-
-            if ($pullRequest->checkComments($plusRequired, $whitelist)) {
-                $output->write(' +1');
-            } else {
-                $output->write(' -1');
-                $pull = false;
-            }
-
-            if ($checkStatus) {
-                if ($pullRequest->checkStatuses()) {
-                    $output->write(' success');
-                } else {
-                    $output->write(' fail');
-                    $pull = false;
-                }
-            }
-
-            if ($pullRequest->isMergeable()) {
-                $output->write(' mergeable');
-            } else {
-                $output->write(' conflicts');
-                $pull = false;
-            }
-
-            if ($pull) {
-                $github->merge($pullRequest->number);
-                $output->write(' pulled');
-                $maxPulls--;
-            }
-
-            $output->writeln('');
-
-            if ($maxPulls<=0) {
-                break;
-            }
+        if (!empty($config['repository'])) {
+          $repositories = array($config['repository']);
+        } else {
+          $repositories = $config['repositories'];
         }
+
+        foreach ($repositories as $repositoryConfig) {
+
+          $username = $repositoryConfig['username'];
+          $repository = $repositoryConfig['name'];
+          $checkStatus = !empty($repositoryConfig['status']);
+
+          $output->writeln("repository: $username/$repository");
+
+          $plusRequired = 3;
+          if (!empty($repositoryConfig['required'])) {
+              $plusRequired = $repositoryConfig['required'];
+          }
+
+          $whitelist = null;
+          if (!empty($repositoryConfig['whitelist'])) {
+              $whitelist = $repositoryConfig['whitelist'];
+          }
+
+          $github->setRepository($username, $repository);
+
+          foreach ($github->getPullRequests() as $pullRequest) {
+              $pull = $input->getOption('pull');
+
+              $output->write($pullRequest->number.' ('.$pullRequest->title.')');
+
+              if ($pullRequest->checkComments($plusRequired, $whitelist)) {
+                  $output->write(' +1');
+              } else {
+                  $output->write(' -1');
+                  $pull = false;
+              }
+
+              if ($checkStatus) {
+                  if ($pullRequest->checkStatuses()) {
+                      $output->write(' success');
+                  } else {
+                      $output->write(' fail');
+                      $pull = false;
+                  }
+              }
+
+              if ($pullRequest->isMergeable()) {
+                  $output->write(' mergeable');
+              } else {
+                  $output->write(' conflicts');
+                  $pull = false;
+              }
+
+              if ($pull) {
+                  $github->merge($pullRequest->number);
+                  $output->write(' pulled');
+                  $maxPulls--;
+              }
+
+              $output->writeln('');
+
+              if ($maxPulls<=0) {
+                  break;
+              }
+          }
+       }
     }
 }
