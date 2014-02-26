@@ -43,6 +43,15 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                 'whitelist' => null,
                 'expected' => false,
             ),
+            'ok with two comments from one user' => array(
+                'comments' => array(
+                     new Comment('usera', 'something'),
+                     new Comment('usera', '+1'),
+                     new Comment('userb', '+1'),
+                ),
+                'whitelist' => null,
+                'expected' => true,
+            ),
             'one user' => array(
                 'comments' => array(
                      new Comment('usera', '+1'),

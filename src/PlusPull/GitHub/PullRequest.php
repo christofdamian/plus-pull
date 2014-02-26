@@ -33,8 +33,9 @@ class PullRequest
 
 
             if (empty($voted[$login])) {
-                $total += $this->getCommentValue($comment->body);
-                $voted[$comment->login] = true;
+                $commentValue = $this->getCommentValue($comment->body);
+                $total += $commentValue;
+                $voted[$comment->login] = $commentValue!=0;
             }
         }
         return $total >= $required;
