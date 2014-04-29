@@ -13,6 +13,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->pullRequest = new PullRequest();
+        $this->pullRequest->user = 'self';
     }
 
 
@@ -75,6 +76,14 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                      new Comment('userb', '+1'),
                 ),
                 'whitelist' => array('usera'),
+                'expected' => false,
+            ),
+            'no self' => array(
+                'comments' => array(
+                     new Comment('self', '+1'),
+                     new Comment('userb', '+1'),
+                ),
+                'whitelist' => array('usera', 'userb'),
                 'expected' => false,
             ),
         );

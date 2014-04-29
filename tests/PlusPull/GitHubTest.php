@@ -76,6 +76,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $tmp->comments = array('comments');
         $tmp->statuses = array('statuses');
         $tmp->isMergeable = true;
+        $tmp->user = 'test';
 
         $sha = 'sha123';
 
@@ -85,6 +86,9 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 'number' => $tmp->number,
                 'head' => array(
                     'sha' => $sha,
+                ),
+                'user' => array(
+                    'login' => $tmp->user,
                 ),
             ),
         );
@@ -131,7 +135,6 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($tmp->statuses));
 
         $github->setRepository(self::GITHUP_USERNAME, self::GITHUB_REPOSITORY);
-
 
         $this->assertEquals($expected, $github->getPullRequests());
     }

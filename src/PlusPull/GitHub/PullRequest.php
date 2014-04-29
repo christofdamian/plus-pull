@@ -12,6 +12,8 @@ class PullRequest
 
     public $statuses = array();
 
+    public $user;
+
     /**
      * @var boolean
      */
@@ -27,10 +29,13 @@ class PullRequest
                 continue;
             }
 
+            if ($login == $this->user) {
+                continue;
+            }
+
             if ($this->isBlocker($comment->body)) {
                 return false;
             }
-
 
             if (empty($voted[$login])) {
                 $commentValue = $this->getCommentValue($comment->body);

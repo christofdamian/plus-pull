@@ -76,6 +76,7 @@ class GitHub
             $pullRequest->comments = $this->getComments($number);
             $pullRequest->statuses = $this->getStatuses($row['head']['sha']);
             $pullRequest->isMergeable = $full['mergeable'];
+            $pullRequest->user = $row['user']['login'];
 
             $result[] = $pullRequest;
         }
