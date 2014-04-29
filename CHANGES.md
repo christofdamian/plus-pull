@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+0.5.3 
+-----
+* do not allow votes by pull request owner
+
+0.5.2
+-----
+* do not allow multiple votes by same user
+
 0.5.1
 -----
 * fix token creation and authentification
