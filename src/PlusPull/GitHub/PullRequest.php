@@ -29,12 +29,12 @@ class PullRequest
                 continue;
             }
 
-            if ($login == $this->user) {
-                continue;
-            }
-
             if ($this->isBlocker($comment->body)) {
                 return false;
+            }
+
+            if ($login == $this->user) {
+                continue;
             }
 
             if (empty($voted[$login])) {

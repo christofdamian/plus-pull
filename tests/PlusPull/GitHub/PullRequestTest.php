@@ -23,6 +23,17 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
             'blocker' => array(
                 'comments' => array(
                      new Comment('usera', '[B]'),
+                     new Comment('userb', '+1'),
+                     new Comment('userc', '+1'),
+                ),
+                'whitelist' => null,
+                'expected' => false,
+            ),
+            'self blocker' => array(
+                'comments' => array(
+                     new Comment('self', '[B]'),
+                     new Comment('userb', '+1'),
+                     new Comment('userc', '+1'),
                 ),
                 'whitelist' => null,
                 'expected' => false,

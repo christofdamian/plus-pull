@@ -1,7 +1,11 @@
 CHANGES
 =======
 
-0.5.3 
+0.5.4
+-----
+* owner is allowed to block
+
+0.5.3
 -----
 * do not allow votes by pull request owner
 
@@ -21,6 +25,6 @@ CHANGES
 -----
 * new token:create command to create github authorization token
 
-0.3.0 
+0.3.0
 -----
-* added voter whitelist 
+* added voter whitelist
