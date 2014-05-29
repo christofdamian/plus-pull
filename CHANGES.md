@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.7
+-----
+* Reverse PR order (again)
+
 0.5.6
 -----
 * fix for null merge message (@ifosch)
