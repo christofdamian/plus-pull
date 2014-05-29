@@ -83,7 +83,9 @@ class Check extends AbstractCommand
 
             $github->setRepository($username, $repository);
 
-            foreach ($github->getPullRequests() as $pullRequest) {
+            $pullRequests = array_reverse($github->getPullRequests());
+
+            foreach ($pullRequests as $pullRequest) {
                 $pull = $input->getOption('pull');
 
                 $output->write(

@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.5
+-----
+* reverse PR order
+
 0.5.4
 -----
 * owner is allowed to block
