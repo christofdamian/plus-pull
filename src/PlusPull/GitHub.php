@@ -116,7 +116,8 @@ class GitHub
         $this->client->api('pull_request')->merge(
             $this->username,
             $this->repository,
-            $number
+            $number,
+            ''
         );
     }
 
