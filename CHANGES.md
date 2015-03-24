@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.5
+-----
+* fix for null merge message (@ifosch)
+
 0.5.4
 -----
 * owner is allowed to block
