@@ -38,9 +38,18 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                 'whitelist' => null,
                 'expected' => false,
             ),
+            'weird spacing blocker' => array(
+                'comments' => array(
+                     new Comment('self', "\n[B]"),
+                     new Comment('userb', '+1'),
+                     new Comment('userc', '+1'),
+                ),
+                'whitelist' => null,
+                'expected' => false,
+            ),
             'ok' => array(
                 'comments' => array(
-                     new Comment('usera', '+1'),
+                     new Comment('usera', ' +1'),
                      new Comment('userb', '+1'),
                 ),
                 'whitelist' => null,
@@ -50,7 +59,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                 'comments' => array(
                      new Comment('usera', '+1'),
                      new Comment('userb', '+1'),
-                     new Comment('userc', '-1'),
+                     new Comment('userc', ' -1'),
                 ),
                 'whitelist' => null,
                 'expected' => false,
@@ -84,7 +93,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
             'whitelist ko' => array(
                 'comments' => array(
                      new Comment('usera', '+1'),
-                     new Comment('userb', '+1'),
+                     new Comment('userb', ':+1:'),
                 ),
                 'whitelist' => array('usera'),
                 'expected' => false,

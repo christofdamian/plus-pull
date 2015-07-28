@@ -48,15 +48,15 @@ class PullRequest
 
     public function isBlocker($commentBody)
     {
-        return preg_match('/^\[B\]/', $commentBody);
+        return preg_match('/^\s*\[B\]/', $commentBody);
     }
 
     public function getCommentValue($commentBody)
     {
-        if (preg_match('/^(\+1\b|:\+1:)/', $commentBody)) {
+        if (preg_match('/^\s*(\+1\b|:\+1:)/', $commentBody)) {
             return 1;
         }
-        if (preg_match('/^(\-1\b|:\-1:)/', $commentBody)) {
+        if (preg_match('/^\s*(\-1\b|:\-1:)/', $commentBody)) {
             return -1;
         }
         return 0;

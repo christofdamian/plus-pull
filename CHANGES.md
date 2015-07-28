@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.8
+-----
+* allow leading whitespace
+
 0.5.7
 -----
 * Reverse PR order (again)
