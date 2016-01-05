@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+0.5.9
+-----
+* fix bug with multiple statuses
+
 0.5.8
 -----
 * allow leading whitespace
