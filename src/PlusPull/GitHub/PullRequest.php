@@ -64,8 +64,14 @@ class PullRequest
 
     public function checkStatuses()
     {
-        if (empty($this->statuses[0]['state'])) {
+        if (empty($this->statuses)) {
             return false;
+        }
+
+        foreach ($this->statuses as $status) {
+            if (empty($status['state']) or $status['state']!='success') {
+                return false;
+            }
         }
 
         return $this->statuses[0]['state']=='success';
