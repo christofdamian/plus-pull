@@ -1,5 +1,9 @@
 CHANGES
 =======
+0.5.12
+* update github api
+* check combined status
+
 0.5.11
 ------ 
 * fix bug in last release

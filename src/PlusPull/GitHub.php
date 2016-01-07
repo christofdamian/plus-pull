@@ -56,7 +56,7 @@ class GitHub
         $data = $this->client->api('pull_request')->all(
             $this->username,
             $this->repository,
-            'open'
+            array('state' => 'open')
         );
 
         $result = array();
@@ -104,7 +104,7 @@ class GitHub
 
     public function getStatuses($sha)
     {
-        return $this->client->api('repos')->statuses()->show(
+        return $this->client->api('repos')->statuses()->combined(
             $this->username,
             $this->repository,
             $sha

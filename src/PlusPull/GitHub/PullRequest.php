@@ -64,17 +64,7 @@ class PullRequest
 
     public function checkStatuses()
     {
-        if (empty($this->statuses)) {
-            return false;
-        }
-
-        foreach ($this->statuses as $status) {
-            if (empty($status['state']) or $status['state']!='success') {
-                return false;
-            }
-        }
-
-        return true;
+        return !empty($this->statuses) && $this->statuses['state']=='success';
     }
 
     public function isMergeable()

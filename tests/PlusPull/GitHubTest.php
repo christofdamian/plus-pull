@@ -104,7 +104,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo(self::GITHUP_USERNAME),
                 $this->equalTo(self::GITHUB_REPOSITORY),
-                $this->equalTo('open')
+                $this->equalTo(array('state' => 'open'))
             )
             ->will($this->returnValue($pullRequestData));
         $pullRequest->expects($this->once())
@@ -193,7 +193,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statuses->expects($this->once())
-            ->method('show')
+            ->method('combined')
             ->with(
                 $this->equalTo(self::GITHUP_USERNAME),
                 $this->equalTo(self::GITHUB_REPOSITORY),

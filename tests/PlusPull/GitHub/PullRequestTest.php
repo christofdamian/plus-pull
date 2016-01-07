@@ -208,25 +208,11 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                 'expected' => false,
             ),
             'success' => array(
-                'statuses' => array(array('state' => 'success')),
+                'statuses' => array('state' => 'success'),
                 'expected' => true,
             ),
             'error' => array(
-                'statuses' => array(array('state' => 'error')),
-                'expected' => false,
-            ),
-            'both, first error' => array(
-                'statuses' => array(
-                    array('state' => 'error'),
-                    array('state' => 'success'),
-                ),
-                'expected' => false,
-            ),
-            'both, first success' => array(
-                'statuses' => array(
-                    array('state' => 'success'),
-                    array('state' => 'error'),
-                ),
+                'statuses' => array('state' => 'error'),
                 'expected' => false,
             ),
         );
