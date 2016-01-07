@@ -1,5 +1,8 @@
 CHANGES
 =======
+0.5.11
+------ 
+* fix bug in last release
 
 0.5.9
 -----
