@@ -2,6 +2,8 @@
 
 namespace PlusPull;
 
+use PlusPull\GitHub\Label;
+
 use PlusPull\GitHub\Comment;
 
 use PlusPull\GitHub\PullRequest;
@@ -81,6 +83,22 @@ class GitHub
             $result[] = $pullRequest;
         }
 
+        return $result;
+    }
+
+    public function getRepositoryLabels()
+    {
+        $labels = $this->client->api('issues')->labels()->all(
+            $this->username,
+            $this->repository
+        );
+
+        $result = array();
+        foreach ($labels as $label) {
+            $result[] = new Label(
+                $label['name']
+            );
+        }
         return $result;
     }
 
