@@ -2,6 +2,8 @@
 
 namespace tests\PlusPull;
 
+use PlusPull\GitHub\Label;
+
 use PlusPull\GitHub\Comment;
 
 use PlusPull\GitHub\PullRequest;
@@ -137,6 +139,54 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $github->setRepository(self::GITHUP_USERNAME, self::GITHUB_REPOSITORY);
 
         $this->assertEquals($expected, $github->getPullRequests());
+    }
+
+    public function testGetRepositoryLabels()
+    {
+        $labelNames = array(
+            'blocked',
+            'enhancement',
+        );
+        $labelsResult = array();
+        $expected = array();
+        foreach ($labelNames as $labelName) {
+            array_push(
+                $labelsResult,
+                array(
+                    'name' => $labelName,
+                )
+            );
+            array_push(
+                $expected,
+                new Label($labelName)
+            );
+        }
+
+        $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $labels->expects($this->once())
+            ->method('all')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY)
+            )
+            ->will($this->returnValue($labelsResult));
+
+        $issue = $this->getMockBuilder('Github\Api\Issue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $issue->expects($this->once())
+            ->method('labels')
+            ->will($this->returnValue($labels));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('issues'))
+            ->will($this->returnValue($issue));
+
+
+        $this->assertEquals($expected, $this->github->getRepositoryLabels());
     }
 
     public function testGetComments()
