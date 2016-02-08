@@ -189,6 +189,47 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->github->getRepositoryLabels());
     }
 
+    public function testGetLabels()
+    {
+        $number = '123';
+        $labelName = 'blocked';
+        $labelsResult = array(
+            array(
+                'name' => $labelName,
+            ),
+        );
+        $expected = array(
+            new Label($labelName),
+        );
+
+        $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $labels->expects($this->once())
+            ->method('all')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $this->equalTo($number)
+            )
+            ->will($this->returnValue($labelsResult));
+
+        $issue = $this->getMockBuilder('Github\Api\Issue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $issue->expects($this->once())
+            ->method('labels')
+            ->will($this->returnValue($labels));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('issues'))
+            ->will($this->returnValue($issue));
+
+
+        $this->assertEquals($expected, $this->github->getLabels($number));
+    }
+
     public function testGetComments()
     {
         $number = '123';
