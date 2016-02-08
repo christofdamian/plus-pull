@@ -102,6 +102,23 @@ class GitHub
         return $result;
     }
 
+    public function getLabels($number)
+    {
+        $labels = $this->client->api('issues')->labels()->all(
+            $this->username,
+            $this->repository,
+            $number
+        );
+
+        $result = array();
+        foreach ($labels as $label) {
+            $result[] = new Label(
+                $label['name']
+            );
+        }
+        return $result;
+    }
+
     public function getComments($number)
     {
         $comments = $this->client->api('issues')->comments()->all(
