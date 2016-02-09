@@ -96,7 +96,8 @@ class GitHub
         $result = array();
         foreach ($labels as $label) {
             $result[] = new Label(
-                $label['name']
+                $label['name'],
+                $label['color']
             );
         }
         return $result;
@@ -113,7 +114,8 @@ class GitHub
         $result = array();
         foreach ($labels as $label) {
             $result[] = new Label(
-                $label['name']
+                $label['name'],
+                $label['color']
             );
         }
         return $result;

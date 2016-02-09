@@ -143,22 +143,32 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
     public function testGetRepositoryLabels()
     {
-        $labelNames = array(
-            'blocked',
-            'enhancement',
+        $labelsData = array(
+            array(
+                'name' => 'blocked',
+                'color' => 'eb6420',
+            ),
+            array(
+                'name' => 'enhancement',
+                'color' => '84b6eb',
+            ),
         );
         $labelsResult = array();
         $expected = array();
-        foreach ($labelNames as $labelName) {
+        foreach ($labelsData as $labelData) {
             array_push(
                 $labelsResult,
                 array(
-                    'name' => $labelName,
+                    'name' => $labelData['name'],
+                    'color' => $labelData['color'],
                 )
             );
             array_push(
                 $expected,
-                new Label($labelName)
+                new Label(
+                    $labelData['name'],
+                    $labelData['color']
+                )
             );
         }
 
@@ -193,13 +203,15 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
     {
         $number = '123';
         $labelName = 'blocked';
+        $labelColor = 'eb6420';
         $labelsResult = array(
             array(
                 'name' => $labelName,
+                'color' => $labelColor,
             ),
         );
         $expected = array(
-            new Label($labelName),
+            new Label($labelName, $labelColor),
         );
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
