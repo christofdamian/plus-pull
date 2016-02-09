@@ -103,6 +103,20 @@ class GitHub
         return $result;
     }
 
+    public function addRepositoryLabel($label)
+    {
+        $labelCreated = $this->client->api('issues')->labels()->create(
+            $this->username,
+            $this->repository,
+            $label->toArray()
+        );
+
+        return new Label(
+            $labelCreated['name'],
+            $labelCreated['color']
+        );
+    }
+
     public function getLabels($number)
     {
         $labels = $this->client->api('issues')->labels()->all(
