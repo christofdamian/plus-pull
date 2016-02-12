@@ -135,6 +135,21 @@ class GitHub
         return $result;
     }
 
+    public function addLabel($number, $label)
+    {
+        $labelAdded = $this->client->api('issues')->labels()->add(
+            $this->username,
+            $this->repository,
+            $number,
+            $label->name
+        );
+
+        return new Label(
+            $labelAdded['name'],
+            $labelAdded['color']
+        );
+    }
+
     public function getComments($number)
     {
         $comments = $this->client->api('issues')->comments()->all(
