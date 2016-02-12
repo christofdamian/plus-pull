@@ -150,6 +150,18 @@ class GitHub
         );
     }
 
+    public function removeLabel($number, $label)
+    {
+        $result = $this->client->api('issues')->labels()->remove(
+            $this->username,
+            $this->repository,
+            $number,
+            $label->name
+        );
+
+        return $result;
+    }
+
     public function getComments($number)
     {
         $comments = $this->client->api('issues')->comments()->all(
