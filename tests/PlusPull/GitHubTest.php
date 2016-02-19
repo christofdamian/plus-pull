@@ -318,6 +318,45 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->github->addLabel($number, $expected));
     }
 
+    public function testRemoveLabel()
+    {
+        $number = '123';
+        $labelName = 'blocked';
+        $labelColor = 'eb6420';
+        $labelToRemove = new Label($labelName, $labelColor);
+
+        $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $labels->expects($this->once())
+            ->method('remove')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $number,
+                $labelName
+            )
+            ->will($this->returnValue(null));
+
+        $issue = $this->getMockBuilder('Github\Api\Issue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $issue->expects($this->once())
+            ->method('labels')
+            ->will($this->returnValue($labels));
+
+        $this->client->expects($this->once())
+            ->method('api')
+            ->with($this->equalTo('issues'))
+            ->will($this->returnValue($issue));
+
+
+        $this->assertEquals(
+            null,
+            $this->github->removeLabel($number, $labelToRemove
+        ));
+    }
+
     public function testGetComments()
     {
         $number = '123';
