@@ -10,6 +10,8 @@ By default these requirements are:
 3. the request is mergeable
 4. (optionally) all build statuses are OK
 
+[![Build Status](https://travis-ci.org/christofdamian/plus-pull.svg?branch=master)](https://travis-ci.org/christofdamian/plus-pull)
+
 Install
 -------
 composer.phar create-project cdamian/plus-pull
