@@ -103,6 +103,17 @@ class GitHub
         return $result;
     }
 
+    public function checkRepositoryLabelExists($label)
+    {
+        $labels = $this->getRepositoryLabels();
+        $result = false;
+        foreach ($labels as $existingLabel) {
+            $result = (strcmp($label->name, $existingLabel->name) == 0);
+            if ($result) { break; }
+        }
+        return $result;
+    }
+
     public function addRepositoryLabel($label)
     {
         $labelCreated = $this->client->api('issues')->labels()->create(
