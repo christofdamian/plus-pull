@@ -199,6 +199,59 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->github->getRepositoryLabels());
     }
 
+    public function testCheckRepositoryLabelExists()
+    {
+        $labelsData = array(
+            array(
+                'name' => 'blocked',
+                'color' => 'eb6420',
+            ),
+            array(
+                'name' => 'enhancement',
+                'color' => '84b6eb',
+            ),
+        );
+        $labelsResult = array();
+        foreach ($labelsData as $labelData) {
+            array_push(
+                $labelsResult,
+                array(
+                    'name' => $labelData['name'],
+                    'color' => $labelData['color'],
+                )
+            );
+        }
+        $blocked = new Label('blocked', 'eb6420');
+        $information = new Label('information', '6420eb');
+
+        $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $labels->expects($this->exactly(2))
+            ->method('all')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY)
+            )
+            ->will($this->returnValue($labelsResult));
+
+        $issue = $this->getMockBuilder('Github\Api\Issue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $issue->expects($this->exactly(2))
+            ->method('labels')
+            ->will($this->returnValue($labels));
+
+        $this->client->expects($this->exactly(2))
+            ->method('api')
+            ->with($this->equalTo('issues'))
+            ->will($this->returnValue($issue));
+
+
+        $this->assertEquals(false, $this->github->checkRepositoryLabelExists($information));
+        $this->assertEquals(true, $this->github->checkRepositoryLabelExists($blocked));
+    }
+
     public function testAddRepositoryLabel()
     {
         $labelToAdd = array(
