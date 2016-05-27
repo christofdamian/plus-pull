@@ -8,6 +8,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use PlusPull\GitHub\Label;
+
 class Check extends AbstractCommand
 {
 
@@ -82,6 +84,11 @@ class Check extends AbstractCommand
             }
 
             $github->setRepository($username, $repository);
+
+            $blocked_label = new Label('blocked', 'eb6420');
+            if (!$github->checkRepositoryLabelExists($blocked_label)) {
+                $github->addRepositoryLabel($blocked_label);
+            }
 
             $pullRequests = array_reverse($github->getPullRequests());
 

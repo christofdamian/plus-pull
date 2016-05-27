@@ -24,6 +24,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkStatuses' => true,
                 'mergeCount' => 2,
                 'token' => null,
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
              ),
             'all ok + token' => array(
                 'input' => array('--pull' => true, '--limit' => 10),
@@ -32,6 +34,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkStatuses' => true,
                 'mergeCount' => 2,
                 'token' => 'token123',
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
              ),
              'limit' => array(
                 'input' => array('--pull' => true, '--limit' => 1),
@@ -40,6 +44,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkStatuses' => true,
                 'mergeCount' => 1,
                 'token' => null,
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
             ),
             '-1' => array(
                 'input' => array('--pull' => true),
@@ -48,6 +54,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkStatuses' => true,
                 'mergeCount' => 0,
                 'token' => null,
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
             ),
             'unmergeable' => array(
                 'input' => array('--pull' => true),
@@ -56,6 +64,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkStatuses' => true,
                 'mergeCount' => 0,
                 'token' => null,
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
             ),
             'fail' => array(
                 'input' => array('--pull' => true),
@@ -64,6 +74,18 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkStatuses' => false,
                 'mergeCount' => 0,
                 'token' => null,
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
+            ),
+            'all ok labelling' => array(
+                'input' => array('--pull' => true, '--limit' => 10),
+                'checkComments' => true,
+                'isMergeable' => true,
+                'checkStatuses' => true,
+                'mergeCount' => 2,
+                'token' => null,
+                'checkRepositoryLabelExists' => false,
+                'addRepositoryLabelCount' => 1,
             ),
         );
     }
@@ -76,6 +98,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
      * @param boolean $checkStatuses
      * @param integer $mergeCount
      * @param string $token
+     * @param boolean $checkRepositoryLabelExists
+     * @param integer $addRepositoryLabelCount
      */
     public function testExecute(
         $input,
@@ -83,7 +107,9 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $isMergeable,
         $checkStatuses,
         $mergeCount,
-        $token
+        $token,
+        $checkRepositoryLabelExists,
+        $addRepositoryLabelCount
     ) {
         $required = 3;
         $whitelist = array('usera');
@@ -149,6 +175,10 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $github->expects($this->once())
             ->method('getPullRequests')
             ->will($this->returnValue($pullRequests));
+        $github->expects($this->once())
+            ->method('checkRepositoryLabelExists')
+            ->will($this->returnValue($checkRepositoryLabelExists));
+        $github->expects($this->exactly($addRepositoryLabelCount))->method('addRepositoryLabel');
         $github->expects($this->exactly($mergeCount))->method('merge');
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
