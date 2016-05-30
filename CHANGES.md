@@ -1,5 +1,8 @@
 CHANGES
 =======
+0.5.13
+* also check review (diff) comments
+
 0.5.12
 * update github api
 * check combined status

@@ -248,8 +248,10 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($issue));
 
 
-        $this->assertEquals(false, $this->github->checkRepositoryLabelExists($information));
-        $this->assertEquals(true, $this->github->checkRepositoryLabelExists($blocked));
+        $this->assertFalse(
+            $this->github->checkRepositoryLabelExists($information)
+        );
+        $this->assertTrue($this->github->checkRepositoryLabelExists($blocked));
     }
 
     public function testAddRepositoryLabel()
@@ -285,7 +287,10 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($issue));
 
 
-        $this->assertEquals($expected, $this->github->addRepositoryLabel($expected));
+        $this->assertEquals(
+            $expected,
+            $this->github->addRepositoryLabel($expected)
+        );
     }
 
     public function testGetLabels()
@@ -368,7 +373,10 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($issue));
 
 
-        $this->assertEquals($expected, $this->github->addLabel($number, $expected));
+        $this->assertEquals(
+            $expected,
+            $this->github->addLabel($number, $expected)
+        );
     }
 
     public function testRemoveLabel()
@@ -406,8 +414,8 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             null,
-            $this->github->removeLabel($number, $labelToRemove
-        ));
+            $this->github->removeLabel($number, $labelToRemove)
+        );
     }
 
     public function testGetComments()
@@ -423,8 +431,19 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 ),
             ),
         );
+        $reviewCommentLogin = 'userb';
+        $reviewCommentBody = 'review comment';
+        $reviewCommentsResult = array(
+            array(
+                'body' => $reviewCommentBody,
+                'user' => array(
+                    'login' => $reviewCommentLogin,
+                ),
+            ),
+        );
         $expected = array(
             new Comment($commentLogin, $commentBody),
+            new Comment($reviewCommentLogin, $reviewCommentBody),
         );
 
         $comments = $this->getMockBuilder('Github\Api\Issue\Comments')
@@ -446,11 +465,34 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->method('comments')
             ->will($this->returnValue($comments));
 
-        $this->client->expects($this->once())
+        $this->client->expects($this->at(0))
             ->method('api')
             ->with($this->equalTo('issues'))
             ->will($this->returnValue($issue));
 
+        $reviewComments = $this->getMockBuilder('Github\Api\Issue\Comments')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $reviewComments->expects($this->once())
+            ->method('all')
+            ->with(
+                $this->equalTo(self::GITHUP_USERNAME),
+                $this->equalTo(self::GITHUB_REPOSITORY),
+                $this->equalTo($number)
+            )
+            ->will($this->returnValue($reviewCommentsResult));
+
+        $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pullRequest->expects($this->once())
+            ->method('comments')
+            ->will($this->returnValue($reviewComments));
+
+        $this->client->expects($this->at(1))
+            ->method('api')
+            ->with($this->equalTo('pull_request'))
+            ->will($this->returnValue($pullRequest));
 
         $this->assertEquals($expected, $this->github->getComments($number));
     }
