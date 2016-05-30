@@ -109,7 +109,9 @@ class GitHub
         $result = false;
         foreach ($labels as $existingLabel) {
             $result = (strcmp($label->name, $existingLabel->name) == 0);
-            if ($result) { break; }
+            if ($result) {
+                break;
+            }
         }
         return $result;
     }
@@ -181,8 +183,14 @@ class GitHub
             $number
         );
 
+        $review_comments = $this->client->api('pull_request')->comments()->all(
+            $this->username,
+            $this->repository,
+            $number
+        );
+
         $result = array();
-        foreach ($comments as $comment) {
+        foreach (array_merge($comments, $review_comments) as $comment) {
             $result[] = new Comment(
                 $comment['user']['login'],
                 $comment['body']
