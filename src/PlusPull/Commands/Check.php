@@ -85,9 +85,14 @@ class Check extends AbstractCommand
 
             $github->setRepository($username, $repository);
 
-            $blocked_label = new Label('blocked', 'eb6420');
-            if (!$github->checkRepositoryLabelExists($blocked_label)) {
-                $github->addRepositoryLabel($blocked_label);
+            $labels = $config['labels'];
+            foreach ($labels as $labelConfig) {
+                $labelConfig['label'] = new Label(
+                    $labelConfig['name'],
+                    $labelConfig['color']);
+                if (!$github->checkRepositoryLabelExists($labelConfig['label'])) {
+                    $github->addRepositoryLabel($labelConfig['label']);
+                }
             }
 
             $pullRequests = array_reverse($github->getPullRequests());

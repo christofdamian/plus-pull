@@ -61,6 +61,11 @@ repositories:
         status: true
         required: 3
         whitelist: [ christofdamian ]
+        labels:
+            -
+                name: blocked
+                color: eb6420
+                hook: [B]
 ```
 
 Credits
