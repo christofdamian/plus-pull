@@ -8,6 +8,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use PlusPull\GitHub\Label;
+
 class Check extends AbstractCommand
 {
 
@@ -82,6 +84,16 @@ class Check extends AbstractCommand
             }
 
             $github->setRepository($username, $repository);
+
+            $labels = $config['labels'];
+            foreach ($labels as $labelConfig) {
+                $labelConfig['label'] = new Label(
+                    $labelConfig['name'],
+                    $labelConfig['color']);
+                if (!$github->checkRepositoryLabelExists($labelConfig['label'])) {
+                    $github->addRepositoryLabel($labelConfig['label']);
+                }
+            }
 
             $pullRequests = array_reverse($github->getPullRequests());
 
