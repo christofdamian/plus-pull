@@ -14,6 +14,8 @@ class PullRequest
 
     public $labels = array();
 
+    public $collectedLabels = array();
+
     public $user;
 
     /**
@@ -72,5 +74,16 @@ class PullRequest
     public function isMergeable()
     {
         return $this->isMergeable;
+    }
+
+    public function collectCommentLabels($configuredLabels)
+    {
+        foreach ($this->comments as $comment) {
+            foreach ($configuredLabels as $configuredLabel) {
+                if (preg_match($configuredLabel['hook'], $comment->body)) {
+                    $this->collectedLabels[] = $configuredLabel['label'];
+                }
+            }
+        }
     }
 }
