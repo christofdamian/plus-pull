@@ -219,6 +219,30 @@ class GitHub
         );
     }
 
+    public function updateLabels($pullRequest)
+    {
+        $labelsToAdd = array_diff(
+            $pullRequest->collectedLabels,
+            $pullRequest->labels
+        );
+        foreach($labelsToAdd as $labelToAdd) {
+            $this->addLabel(
+                $pullRequest->number,
+                $labelToAdd
+            );
+        }
+        $labelsToRemove = array_diff(
+            $pullRequest->labels,
+            $pullRequest->collectedLabels
+        );
+        foreach($labelsToRemove as $labelToRemove) {
+            $this->removeLabel(
+                $pullRequest->number,
+                $labelToRemove
+            );
+        }
+    }
+
     public function createToken($note)
     {
         $result = $this->client->api('authorizations')->create(

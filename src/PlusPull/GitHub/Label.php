@@ -20,4 +20,9 @@ class Label
             'color' => $this->color,
         );
     }
+
+    public function __toString()
+    {
+        return 'Label ' . $this->name . ' with color ' . $this->color;
+    }
 }

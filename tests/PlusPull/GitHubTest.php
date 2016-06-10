@@ -540,8 +540,8 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $number = 123;
 
         $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
-            ->disableOriginalConstructor()
-            ->getMock();
+                     ->disableOriginalConstructor()
+                     ->getMock();
         $pullRequest->expects($this->once())
             ->method('merge')
             ->with(
@@ -556,6 +556,36 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($pullRequest));
 
         $this->github->merge($number);
+    }
+
+    public function testUpdateLabels()
+    {
+        $blockedLabel = new Label('blocked', 'eb6420');
+        $discussionLabel = new Label('discussion', '0000ff');
+
+        $pullRequest = new PullRequest();
+        $pullRequest->number = 123;
+        $pullRequest->labels = array($blockedLabel,);
+        $pullRequest->collectedLabels = array($discussionLabel,);
+
+        $github = $this->getMockBuilder('PlusPull\GitHub')
+                ->setConstructorArgs(array($this->client))
+                ->setMethods(array('addLabel', 'removeLabel'))
+                ->getMock();
+        $github->expects($this->once())
+            ->method('addLabel')
+            ->with(
+                $this->equalTo($pullRequest->number),
+                $discussionLabel
+            );
+        $github->expects($this->once())
+            ->method('removeLabel')
+            ->with(
+                $this->equalTo($pullRequest->number),
+                $blockedLabel
+            );
+
+        $github->updateLabels($pullRequest);
     }
 
     public function testCreateToken()
