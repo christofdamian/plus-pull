@@ -4,6 +4,8 @@ namespace tests\PlusPull\GitHub;
 
 use PlusPull\GitHub\Comment;
 
+use PlusPull\GitHub\Label;
+
 use PlusPull\GitHub\PullRequest;
 
 class PullRequestTest extends \PHPUnit_Framework_TestCase
@@ -233,5 +235,113 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
     public function testIsMergeable()
     {
         $this->assertFalse($this->pullRequest->isMergeable());
+    }
+
+    public function collectCommentLabelsProvider()
+    {
+        $blockedLabel = new Label('blocked', 'eb6420');
+        $discussionLabel = new Label('discussion', '0000ff');
+        return array(
+            'no-comments' => array(
+                'comments' => array(),
+                'configLabels' => array(
+                    array (
+                        'name' => 'blocked',
+                        'color' => 'eb6420',
+                        'hook' => '[B]',
+                        'label' => $blockedLabel,
+                    ),
+                ),
+                'collectedLabels' => array(),
+            ),
+            'no-configured-labels' => array(
+                'comments' => array(
+                    new Comment('usera', '[B]'),
+                ),
+                'configLabels' => array(),
+                'collectedLabels' => array(),
+            ),
+            'block-label' => array(
+                'comments' => array(
+                     new Comment('usera', '[B]'),
+                ),
+                'configLabels' => array(
+                    array (
+                        'name' => 'blocked',
+                        'color' => 'eb6420',
+                        'hook' => '/^\s*\[B\]/',
+                        'label' => $blockedLabel,
+                    ),
+                ),
+                'collectedLabels' => array(
+                    $blockedLabel,
+                ),
+            ),
+            'discussion-blocked' => array(
+                'comments' => array(
+                    new Comment('usera', 'This PR is for discussion.'),
+                    new Comment('usera', '[B]'),
+                ),
+                'configLabels' => array(
+                    array (
+                        'name' => 'blocked',
+                        'color' => 'eb6420',
+                        'hook' => '/^\s*\[B\]/',
+                        'label' => $blockedLabel,
+                    ),
+                    array (
+                        'name' => 'discussion',
+                        'color' => '0000ff',
+                        'hook' => '/.* for discussion.*/',
+                        'label' => $discussionLabel,
+                    ),
+                ),
+                'collectedLabels' => array(
+                    $discussionLabel,
+                    $blockedLabel,
+                ),
+            ),
+            'no-discussion-but-blocked' => array(
+                'comments' => array(
+                    new Comment('usera', 'This PR is ~~for discussion~~.'),
+                    new Comment('usera', '[B]'),
+                ),
+                'configLabels' => array(
+                    array (
+                        'name' => 'blocked',
+                        'color' => 'eb6420',
+                        'hook' => '/^\s*\[B\]/',
+                        'label' => $blockedLabel,
+                    ),
+                    array (
+                        'name' => 'discussion',
+                        'color' => '0000ff',
+                        'hook' => '/.* for discussion.*/',
+                        'label' => $discussionLabel,
+                    ),
+                ),
+                'collectedLabels' => array(
+                    $blockedLabel,
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider collectCommentLabelsProvider
+     *
+     * @param array $comments
+     * @param array $configLabels
+     * @param array $collectedLabels
+     */
+    public function testCollectCommentLabels($comments, $configLabels, $collectedLabels)
+    {
+        $this->pullRequest->comments = $comments;
+
+        $this->pullRequest->collectCommentLabels($configLabels);
+        $this->assertEquals(
+            $collectedLabels,
+            $this->pullRequest->collectedLabels
+        );
     }
 }
