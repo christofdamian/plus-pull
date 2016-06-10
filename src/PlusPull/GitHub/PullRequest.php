@@ -12,6 +12,8 @@ class PullRequest
 
     public $statuses = array();
 
+    public $labels = array();
+
     public $user;
 
     /**

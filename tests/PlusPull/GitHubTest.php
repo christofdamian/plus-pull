@@ -77,6 +77,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $tmp->number = 123;
         $tmp->comments = array('comments');
         $tmp->statuses = array('statuses');
+        $tmp->labels = array('labels');
         $tmp->isMergeable = true;
         $tmp->user = 'test';
 
@@ -125,7 +126,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->setConstructorArgs(array($this->client))
-            ->setMethods(array('getComments', 'getStatuses'))
+            ->setMethods(array('getComments', 'getStatuses', 'getLabels'))
             ->getMock();
         $github->expects($this->once())
             ->method('getComments')
@@ -135,6 +136,10 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->method('getStatuses')
             ->with($this->equalTo($sha))
             ->will($this->returnValue($tmp->statuses));
+        $github->expects($this->once())
+            ->method('getLabels')
+            ->with($this->equalTo($tmp->number))
+            ->will($this->returnValue($tmp->labels));
 
         $github->setRepository(self::GITHUP_USERNAME, self::GITHUB_REPOSITORY);
 
