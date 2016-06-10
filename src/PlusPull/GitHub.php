@@ -77,6 +77,7 @@ class GitHub
             $pullRequest->title = $row['title'];
             $pullRequest->comments = $this->getComments($number);
             $pullRequest->statuses = $this->getStatuses($row['head']['sha']);
+            $pullRequest->labels = $this->getLabels($number);
             $pullRequest->isMergeable = $full['mergeable'];
             $pullRequest->user = $row['user']['login'];
 
