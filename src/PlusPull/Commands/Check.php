@@ -104,6 +104,8 @@ class Check extends AbstractCommand
                     $pullRequest->number.' ('.$pullRequest->title.')'
                 );
 
+                $pullRequest->collectCommentLabels($labels);
+
                 if ($pullRequest->checkComments($plusRequired, $whitelist)) {
                     $output->write(' +1');
                 } else {

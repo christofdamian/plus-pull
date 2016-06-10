@@ -118,6 +118,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
         $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
         $pullRequest->expects($this->atLeastOnce())
+            ->method('collectCommentLabels');
+        $pullRequest->expects($this->atLeastOnce())
             ->method('checkComments')
             ->with($this->equalTo($required), $this->equalTo($whitelist))
             ->will($this->returnValue($checkComments));
