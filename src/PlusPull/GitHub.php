@@ -225,7 +225,7 @@ class GitHub
             $pullRequest->collectedLabels,
             $pullRequest->labels
         );
-        foreach($labelsToAdd as $labelToAdd) {
+        foreach ($labelsToAdd as $labelToAdd) {
             $this->addLabel(
                 $pullRequest->number,
                 $labelToAdd
@@ -235,7 +235,7 @@ class GitHub
             $pullRequest->labels,
             $pullRequest->collectedLabels
         );
-        foreach($labelsToRemove as $labelToRemove) {
+        foreach ($labelsToRemove as $labelToRemove) {
             $this->removeLabel(
                 $pullRequest->number,
                 $labelToRemove
