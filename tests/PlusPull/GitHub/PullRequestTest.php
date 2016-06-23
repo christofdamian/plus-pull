@@ -334,8 +334,11 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
      * @param array $configLabels
      * @param array $collectedLabels
      */
-    public function testCollectCommentLabels($comments, $configLabels, $collectedLabels)
-    {
+    public function testCollectCommentLabels(
+        $comments,
+        $configLabels,
+        $collectedLabels
+    ) {
         $this->pullRequest->comments = $comments;
 
         $this->pullRequest->collectCommentLabels($configLabels);

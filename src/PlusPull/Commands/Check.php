@@ -89,8 +89,10 @@ class Check extends AbstractCommand
             foreach ($labels as $labelConfig) {
                 $labelConfig['label'] = new Label(
                     $labelConfig['name'],
-                    $labelConfig['color']);
-                if (!$github->checkRepositoryLabelExists($labelConfig['label'])) {
+                    $labelConfig['color']
+                );
+                if (!$github
+                    ->checkRepositoryLabelExists($labelConfig['label'])) {
                     $github->addRepositoryLabel($labelConfig['label']);
                 }
             }
@@ -103,6 +105,8 @@ class Check extends AbstractCommand
                 $output->write(
                     $pullRequest->number.' ('.$pullRequest->title.')'
                 );
+
+                $pullRequest->collectCommentLabels($labels);
 
                 if ($pullRequest->checkComments($plusRequired, $whitelist)) {
                     $output->write(' +1');
@@ -126,6 +130,8 @@ class Check extends AbstractCommand
                     $output->write(' conflicts');
                     $pull = false;
                 }
+
+                $github->updateLabels($pullRequest);
 
                 if ($pull) {
                     $github->merge($pullRequest->number);

@@ -118,6 +118,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
         $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
         $pullRequest->expects($this->atLeastOnce())
+            ->method('collectCommentLabels');
+        $pullRequest->expects($this->atLeastOnce())
             ->method('checkComments')
             ->with($this->equalTo($required), $this->equalTo($whitelist))
             ->will($this->returnValue($checkComments));
@@ -185,8 +187,12 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $github->expects($this->once())
             ->method('checkRepositoryLabelExists')
             ->will($this->returnValue($checkRepositoryLabelExists));
-        $github->expects($this->exactly($addRepositoryLabelCount))->method('addRepositoryLabel');
+        $github->expects($this->exactly($addRepositoryLabelCount))
+            ->method('addRepositoryLabel');
         $github->expects($this->exactly($mergeCount))->method('merge');
+        $github->expects($this->atLeastOnce())
+            ->method('updateLabels')
+            ->with($this->equalTo($pullRequest));
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
             ->setMethods(array('getGitHub', 'getYaml'))
