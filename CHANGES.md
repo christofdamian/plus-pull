@@ -1,5 +1,8 @@
 CHANGES
 =======
+0.6.0
+* support for adding labels
+
 0.5.13
 * also check review (diff) comments
 

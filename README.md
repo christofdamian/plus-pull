@@ -48,6 +48,11 @@ The other section sets the repository owner and name and you can change
 the defaults for needed votes, if status will be checked and voter 
 whitelist.
 
+You have also the option to automatically add labels for keywords found
+in the comments. In the example below we will add the label 'blocked'
+with the given color if we see '[B]' in one of the comments. The label
+will be created if it doesn't exist.
+
 ```yaml
 authorization:
     username: christofdamian
