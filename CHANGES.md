@@ -1,7 +1,7 @@
 CHANGES
 =======
 0.6.0
-* support for adding labels
+* support for adding labels (by @ifosch)
 
 0.5.13
 * also check review (diff) comments

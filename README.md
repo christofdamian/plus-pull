@@ -77,3 +77,5 @@ Credits
 -------
 We are using a similar script at work, which was started by @adriacidre .
 This is a complete rewrite though to make it easier to add further features.
+
+Label support by @ifosch
