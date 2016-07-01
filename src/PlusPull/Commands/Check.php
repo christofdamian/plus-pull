@@ -85,7 +85,7 @@ class Check extends AbstractCommand
 
             $github->setRepository($username, $repository);
 
-            $labels = $config['labels'];
+            $labels = $repositoryConfig['labels'];
             foreach ($labels as $labelConfig) {
                 $labelConfig['label'] = new Label(
                     $labelConfig['name'],

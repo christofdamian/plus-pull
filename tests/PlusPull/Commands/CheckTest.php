@@ -149,12 +149,12 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'status' => true,
                 'required' => $required,
                 'whitelist' => $whitelist,
-            ),
-            'labels' => array(
-                array(
-                    'name' => 'blocked',
-                    'color' => 'eb6420',
-                    'hook' => '[B]',
+                'labels' => array(
+                    array(
+                        'name' => 'blocked',
+                        'color' => 'eb6420',
+                        'hook' => '[B]',
+                    ),
                 ),
             ),
         );
