@@ -85,15 +85,18 @@ class Check extends AbstractCommand
 
             $github->setRepository($username, $repository);
 
-            $labels = $repositoryConfig['labels'];
-            foreach ($labels as $labelConfig) {
-                $labelConfig['label'] = new Label(
-                    $labelConfig['name'],
-                    $labelConfig['color']
-                );
-                if (!$github
-                    ->checkRepositoryLabelExists($labelConfig['label'])) {
-                    $github->addRepositoryLabel($labelConfig['label']);
+            $labels = array();
+            if (!empty($repositoryConfig['labels'])) {
+                $labels = $repositoryConfig['labels'];
+                foreach ($labels as $labelConfig) {
+                    $labelConfig['label'] = new Label(
+                        $labelConfig['name'],
+                        $labelConfig['color']
+                    );
+                    if (!$github
+                        ->checkRepositoryLabelExists($labelConfig['label'])) {
+                        $github->addRepositoryLabel($labelConfig['label']);
+                    }
                 }
             }
 
