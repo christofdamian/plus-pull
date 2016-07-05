@@ -22,7 +22,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkComments' => true,
                 'isMergeable' => true,
                 'checkStatuses' => true,
-                'mergeCount' => 2,
+                'mergeCount' => 4,
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
@@ -32,7 +32,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkComments' => true,
                 'isMergeable' => true,
                 'checkStatuses' => true,
-                'mergeCount' => 2,
+                'mergeCount' => 4,
                 'token' => 'token123',
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
@@ -42,7 +42,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkComments' => true,
                 'isMergeable' => true,
                 'checkStatuses' => true,
-                'mergeCount' => 1,
+                'mergeCount' => 2,
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
@@ -82,7 +82,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'checkComments' => true,
                 'isMergeable' => true,
                 'checkStatuses' => true,
-                'mergeCount' => 2,
+                'mergeCount' => 4,
                 'token' => null,
                 'checkRepositoryLabelExists' => false,
                 'addRepositoryLabelCount' => 1,
@@ -143,18 +143,27 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'password' => $password,
                 'token'    => $token,
             ),
-            'repository' => array(
-                'name' => 'test-repo',
-                'username' => 'test-owner',
-                'status' => true,
-                'required' => $required,
-                'whitelist' => $whitelist,
-                'labels' => array(
-                    array(
-                        'name' => 'blocked',
-                        'color' => 'eb6420',
-                        'hook' => '[B]',
+            'repositories' => array(
+                array(
+                    'name' => 'test-repo',
+                    'username' => 'test-owner',
+                    'status' => true,
+                    'required' => $required,
+                    'whitelist' => $whitelist,
+                    'labels' => array(
+                        array(
+                            'name' => 'blocked',
+                            'color' => 'eb6420',
+                            'hook' => '[B]',
+                        ),
                     ),
+                ),
+                array(
+                    'name' => 'test-repo-no-labels',
+                    'username' => 'test-owner',
+                    'status' => true,
+                    'required' => $required,
+                    'whitelist' => $whitelist,
                 ),
             ),
         );
@@ -181,7 +190,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 ->with($this->equalTo($username), $this->equalTo($password));
         }
 
-        $github->expects($this->once())
+        $github->expects($this->atLeastOnce())
             ->method('getPullRequests')
             ->will($this->returnValue($pullRequests));
         $github->expects($this->once())
