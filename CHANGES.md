@@ -1,5 +1,8 @@
 CHANGES
 =======
+0.6.1 
+* bugfix for labels
+
 0.6.0
 * support for adding labels (by @ifosch)
 
