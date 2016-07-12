@@ -88,7 +88,7 @@ class Check extends AbstractCommand
             $labels = array();
             if (!empty($repositoryConfig['labels'])) {
                 $labels = $repositoryConfig['labels'];
-                foreach ($labels as $labelConfig) {
+                foreach ($labels as $key => $labelConfig) {
                     $labelConfig['label'] = new Label(
                         $labelConfig['name'],
                         $labelConfig['color']
@@ -97,6 +97,7 @@ class Check extends AbstractCommand
                         ->checkRepositoryLabelExists($labelConfig['label'])) {
                         $github->addRepositoryLabel($labelConfig['label']);
                     }
+                    $labels[$key] = $labelConfig;
                 }
             }
 

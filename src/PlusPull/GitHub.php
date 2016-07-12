@@ -157,11 +157,6 @@ class GitHub
             $number,
             $label->name
         );
-
-        return new Label(
-            $labelAdded['name'],
-            $labelAdded['color']
-        );
     }
 
     public function removeLabel($number, $label)

@@ -350,7 +350,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             'name' => $labelName,
             'color' => $labelColor,
         );
-        $expected = new Label($labelName, $labelColor);
+        $labelToAdd = new Label($labelName, $labelColor);
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
@@ -378,10 +378,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($issue));
 
 
-        $this->assertEquals(
-            $expected,
-            $this->github->addLabel($number, $expected)
-        );
+        $this->github->addLabel($number, $labelToAdd);
     }
 
     public function testRemoveLabel()
