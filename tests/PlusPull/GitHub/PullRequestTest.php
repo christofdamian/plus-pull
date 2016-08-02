@@ -269,7 +269,7 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                     array (
                         'name' => 'blocked',
                         'color' => 'eb6420',
-                        'hook' => '/^\s*\[B\]/',
+                        'hook' => '[B]',
                         'label' => $blockedLabel,
                     ),
                 ),
@@ -286,13 +286,13 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                     array (
                         'name' => 'blocked',
                         'color' => 'eb6420',
-                        'hook' => '/^\s*\[B\]/',
+                        'hook' => '[B]',
                         'label' => $blockedLabel,
                     ),
                     array (
                         'name' => 'discussion',
                         'color' => '0000ff',
-                        'hook' => '/.* for discussion.*/',
+                        'hook' => 'for discussion',
                         'label' => $discussionLabel,
                     ),
                 ),
@@ -310,13 +310,13 @@ class PullRequestTest extends \PHPUnit_Framework_TestCase
                     array (
                         'name' => 'blocked',
                         'color' => 'eb6420',
-                        'hook' => '/^\s*\[B\]/',
+                        'hook' => '[B]',
                         'label' => $blockedLabel,
                     ),
                     array (
                         'name' => 'discussion',
                         'color' => '0000ff',
-                        'hook' => '/.* for discussion.*/',
+                        'hook' => 'for discussion',
                         'label' => $discussionLabel,
                     ),
                 ),

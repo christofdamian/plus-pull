@@ -80,7 +80,9 @@ class PullRequest
     {
         foreach ($this->comments as $comment) {
             foreach ($configuredLabels as $configuredLabel) {
-                if (preg_match($configuredLabel['hook'], $comment->body)) {
+                $hook = quotemeta($configuredLabel['hook']);
+                $pattern = '/^[^~]*' . $hook . '[^~]*$/';
+                if (preg_match($pattern, $comment->body)) {
                     $this->collectedLabels[] = $configuredLabel['label'];
                 }
             }
