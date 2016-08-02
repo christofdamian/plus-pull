@@ -70,7 +70,7 @@ repositories:
             -
                 name: blocked
                 color: eb6420
-                hook: [B]
+                hook: '[B]'
 ```
 
 Credits
