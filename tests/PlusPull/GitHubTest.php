@@ -575,12 +575,6 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 $this->equalTo($pullRequest->number),
                 $discussionLabel
             );
-        $github->expects($this->once())
-            ->method('removeLabel')
-            ->with(
-                $this->equalTo($pullRequest->number),
-                $blockedLabel
-            );
 
         $github->updateLabels($pullRequest);
     }
