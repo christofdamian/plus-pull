@@ -226,16 +226,6 @@ class GitHub
                 $labelToAdd
             );
         }
-        $labelsToRemove = array_diff(
-            $pullRequest->labels,
-            $pullRequest->collectedLabels
-        );
-        foreach ($labelsToRemove as $labelToRemove) {
-            $this->removeLabel(
-                $pullRequest->number,
-                $labelToRemove
-            );
-        }
     }
 
     public function createToken($note)
