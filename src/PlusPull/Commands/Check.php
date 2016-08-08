@@ -135,7 +135,7 @@ class Check extends AbstractCommand
                     $pull = false;
                 }
 
-                $github->updateLabels($pullRequest);
+                $github->updateLabels($pullRequest, $labels);
 
                 if ($pull) {
                     $github->merge($pullRequest->number);

@@ -214,7 +214,7 @@ class GitHub
         );
     }
 
-    public function updateLabels($pullRequest)
+    public function updateLabels($pullRequest, $configuredLabels)
     {
         $labelsToAdd = array_diff(
             $pullRequest->collectedLabels,
@@ -225,6 +225,25 @@ class GitHub
                 $pullRequest->number,
                 $labelToAdd
             );
+        }
+
+        $labelsToRemove = array_diff(
+            $pullRequest->labels,
+            $pullRequest->collectedLabels
+        );
+        foreach ($labelsToRemove as $labelToRemove) {
+            foreach ($configuredLabels as $configuredLabel) {
+                $comparison = strcmp(
+                    $labelToRemove->name,
+                    $configuredLabel['name']
+                );
+                if ($comparison == 0) {
+                    $this->removeLabel(
+                        $pullRequest->number,
+                        $labelToRemove
+                    );
+                }
+            }
         }
     }
 
