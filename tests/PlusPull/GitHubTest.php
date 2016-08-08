@@ -559,10 +559,22 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
     {
         $blockedLabel = new Label('blocked', 'eb6420');
         $discussionLabel = new Label('discussion', '0000ff');
+        $anotherLabel = new Label('another', '0000ff');
+        $configuredLabels = array();
+        $configuredLabels['blocked'] = array(
+            'name' => 'blocked',
+            'color' => 'eb6420',
+            'label' => $blockedLabel,
+        );
+        $configuredLabels['discussion'] = array(
+            'name' => 'discussion',
+            'color' => '0000ff',
+            'label' => $discussionLabel,
+        );
 
         $pullRequest = new PullRequest();
         $pullRequest->number = 123;
-        $pullRequest->labels = array($blockedLabel,);
+        $pullRequest->labels = array($blockedLabel, $anotherLabel);
         $pullRequest->collectedLabels = array($discussionLabel,);
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
@@ -575,8 +587,14 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
                 $this->equalTo($pullRequest->number),
                 $discussionLabel
             );
+        $github->expects($this->once())
+            ->method('removeLabel')
+            ->with(
+                $this->equalTo($pullRequest->number),
+                $blockedLabel
+            );
 
-        $github->updateLabels($pullRequest);
+        $github->updateLabels($pullRequest, $configuredLabels);
     }
 
     public function testCreateToken()

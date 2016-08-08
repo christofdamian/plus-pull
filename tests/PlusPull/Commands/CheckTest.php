@@ -200,8 +200,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->method('addRepositoryLabel');
         $github->expects($this->exactly($mergeCount))->method('merge');
         $github->expects($this->atLeastOnce())
-            ->method('updateLabels')
-            ->with($this->equalTo($pullRequest));
+            ->method('updateLabels');
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
             ->setMethods(array('getGitHub', 'getYaml'))
