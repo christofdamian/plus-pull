@@ -233,11 +233,7 @@ class GitHub
         );
         foreach ($labelsToRemove as $labelToRemove) {
             foreach ($configuredLabels as $configuredLabel) {
-                $comparison = strcmp(
-                    $labelToRemove->name,
-                    $configuredLabel['name']
-                );
-                if ($comparison == 0) {
+                if ($labelToRemove->name == $configuredLabel['name']) {
                     $this->removeLabel(
                         $pullRequest->number,
                         $labelToRemove
