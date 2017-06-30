@@ -23,11 +23,6 @@ class GitHub
     public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->client->getHttpClient()->setHeaders(
-            array(
-                'User-Agent' => self::USER_AGENT,
-            )
-        );
     }
 
     public function authenticate($username, $password)
@@ -80,6 +75,7 @@ class GitHub
             $pullRequest->labels = $this->getLabels($number);
             $pullRequest->isMergeable = $full['mergeable'];
             $pullRequest->user = $row['user']['login'];
+            $pullRequest->sha = $row['head']['sha'];
 
             $result[] = $pullRequest;
         }
@@ -204,13 +200,15 @@ class GitHub
         );
     }
 
-    public function merge($number)
+    public function merge($number, $sha, $mergeMethod = 'merge')
     {
         $this->client->api('pull_request')->merge(
             $this->username,
             $this->repository,
             $number,
-            ''
+            '',
+            $sha,
+            $mergeMethod
         );
     }
 
