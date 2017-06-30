@@ -18,6 +18,8 @@ class PullRequest
 
     public $user;
 
+    public $updatedAt;
+
     /**
      * @var boolean
      */

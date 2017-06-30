@@ -80,6 +80,7 @@ class GitHub
             $pullRequest->labels = $this->getLabels($number);
             $pullRequest->isMergeable = $full['mergeable'];
             $pullRequest->user = $row['user']['login'];
+            $pullRequest->updatedAt = $row['updated_at'];
 
             $result[] = $pullRequest;
         }

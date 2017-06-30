@@ -2,8 +2,8 @@
 
 plus-pull
 =========
-Simple script that checks pull requests on a repository on Github and pulls 
-them if they satisfy certain requirements. 
+Simple script that checks pull requests on a repository on Github and pulls
+them if they satisfy certain requirements.
 
 By default these requirements are:
 
@@ -41,11 +41,11 @@ Create a new github authorization token:
 Configuration File
 ------------------
 
-With the config file you can set the github authorization username and 
+With the config file you can set the github authorization username and
 password or an github authorizisation token.
 
 The other section sets the repository owner and name and you can change
-the defaults for needed votes, if status will be checked and voter 
+the defaults for needed votes, if status will be checked and voter
 whitelist.
 
 You have also the option to automatically add labels for keywords found
@@ -66,6 +66,7 @@ repositories:
         status: true
         required: 3
         whitelist: [ christofdamian ]
+        wait: 300
         labels:
             -
                 name: blocked
