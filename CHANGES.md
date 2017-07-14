@@ -1,5 +1,9 @@
 CHANGES
 =======
+0.7.0
+* support for grace period after last comment "wait"
+* support for different GitHub merge methods "mergemethod"
+
 0.6.1 
 * bugfix for labels
 

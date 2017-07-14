@@ -67,6 +67,7 @@ repositories:
         required: 3
         whitelist: [ christofdamian ]
         wait: 300
+        mergemode: merge
         labels:
             -
                 name: blocked
