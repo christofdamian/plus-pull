@@ -74,7 +74,7 @@ class Check extends AbstractCommand
             $output->writeln("repository: $username/$repository");
 
             $plusRequired = 3;
-            if (!empty($repositoryConfig['required'])) {
+            if (isset($repositoryConfig['required'])) {
                 $plusRequired = $repositoryConfig['required'];
             }
 
@@ -86,6 +86,11 @@ class Check extends AbstractCommand
             $wait = 0;
             if (!empty($repositoryConfig['wait'])) {
                 $wait = $repositoryConfig['wait'];
+            }
+
+            $mergeMethod = 'merge';
+            if (!empty($repositoryConfig['mergemethod'])) {
+                $mergeMethod= $repositoryConfig['mergemethod'];
             }
 
             $github->setRepository($username, $repository);
@@ -151,7 +156,11 @@ class Check extends AbstractCommand
                 $github->updateLabels($pullRequest, $labels);
 
                 if ($pull) {
-                    $github->merge($pullRequest->number);
+                    $github->merge(
+                        $pullRequest->number,
+                        $pullRequest->sha,
+                        $mergeMethod
+                    );
                     $output->write(' pulled');
                     $maxPulls--;
                 }

@@ -20,6 +20,8 @@ class PullRequest
 
     public $updatedAt;
 
+    public $sha;
+
     /**
      * @var boolean
      */

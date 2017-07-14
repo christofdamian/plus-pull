@@ -26,14 +26,6 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $httpClient = $this->getMock('Github\HttpClient\HttpClient');
-        $httpClient->expects($this->atLeastOnce())
-            ->method('setHeaders');
-
-        $this->client->expects($this->atLeastOnce())
-            ->method('getHttpClient')
-            ->will($this->returnValue($httpClient));
-
         $this->github = new GitHub($this->client);
         $this->github->setRepository(
             self::GITHUP_USERNAME,
@@ -72,6 +64,8 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
     public function testGetPullRequests()
     {
+        $sha = 'sha123';
+
         $tmp = new PullRequest();
         $tmp->title = 'test title';
         $tmp->number = 123;
@@ -81,8 +75,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $tmp->isMergeable = true;
         $tmp->user = 'test';
         $tmp->updatedAt = '2017-06-30T15:00:23Z';
-
-        $sha = 'sha123';
+        $tmp->sha = $sha;
 
         $pullRequestData = array(
             array(
@@ -537,6 +530,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
     public function testMerge()
     {
         $number = 123;
+        $sha = 'sha123';
 
         $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
                      ->disableOriginalConstructor()
@@ -546,7 +540,10 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo(self::GITHUP_USERNAME),
                 $this->equalTo(self::GITHUB_REPOSITORY),
-                $this->equalTo($number)
+                $this->equalTo($number),
+                $this->equalTo(''),
+                $this->equalTo($sha),
+                $this->equalTo('merge')
             );
 
         $this->client->expects($this->once())
@@ -554,7 +551,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('pull_request'))
             ->will($this->returnValue($pullRequest));
 
-        $this->github->merge($number);
+        $this->github->merge($number, $sha);
     }
 
     public function testUpdateLabels()
