@@ -74,13 +74,14 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $tmp->labels = array('labels');
         $tmp->isMergeable = true;
         $tmp->user = 'test';
+        $tmp->updatedAt = '2017-06-30T15:00:23Z';
         $tmp->sha = $sha;
-
 
         $pullRequestData = array(
             array(
                 'title' => $tmp->title,
                 'number' => $tmp->number,
+                'updated_at' => $tmp->updatedAt,
                 'head' => array(
                     'sha' => $sha,
                 ),

@@ -9,6 +9,7 @@ repository:
     status: true
     required: 3
     whitelist: [ christofdamian ]
+    wait: 300
     labels:
         -
             name: blocked

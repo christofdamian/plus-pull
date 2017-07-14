@@ -83,6 +83,11 @@ class Check extends AbstractCommand
                 $whitelist = $repositoryConfig['whitelist'];
             }
 
+            $wait = 0;
+            if (!empty($repositoryConfig['wait'])) {
+                $wait = $repositoryConfig['wait'];
+            }
+
             $mergeMethod = 'merge';
             if (!empty($repositoryConfig['mergemethod'])) {
                 $mergeMethod= $repositoryConfig['mergemethod'];
@@ -114,6 +119,14 @@ class Check extends AbstractCommand
                 $output->write(
                     $pullRequest->number.' ('.$pullRequest->title.')'
                 );
+
+                $output->writeln($wait);
+                $output->writeln(time()-strtotime($pullRequest->updatedAt));
+
+                if ($wait &&
+                    $wait > time()-strtotime($pullRequest->updatedAt)) {
+                    $output->write(' waiting');
+                }
 
                 $pullRequest->collectCommentLabels($labels);
 
