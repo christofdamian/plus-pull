@@ -119,9 +119,6 @@ class Check extends AbstractCommand
                     $pullRequest->number.' ('.$pullRequest->title.')'
                 );
 
-                $output->writeln($wait);
-                $output->writeln(time()-strtotime($pullRequest->updatedAt));
-
                 if ($wait &&
                     $wait > time()-strtotime($pullRequest->updatedAt)) {
                     $output->write(' waiting');
