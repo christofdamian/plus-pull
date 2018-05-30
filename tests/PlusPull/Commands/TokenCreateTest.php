@@ -24,7 +24,7 @@ class TokenCreateTest extends TestCase
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->disableOriginalConstructor()
-            ->createMock();
+            ->getMock();
         $github->expects($this->once())
             ->method('authenticate')
             ->with($this->equalTo($username), $this->equalTo($password));
@@ -35,7 +35,7 @@ class TokenCreateTest extends TestCase
 
         $tokenCreate = $this->getMockBuilder('PlusPull\Commands\TokenCreate')
             ->setMethods(array('getGitHub', 'dumpYaml'))
-            ->createMock();
+            ->getMock();
         $tokenCreate->expects($this->once())
             ->method('getGitHub')
             ->will($this->returnValue($github));

@@ -171,7 +171,7 @@ class CheckTest extends TestCase
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->disableOriginalConstructor()
-            ->createMock();
+            ->getMock();
 
         if ($token) {
             $github->expects($this->once())
@@ -197,7 +197,7 @@ class CheckTest extends TestCase
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
             ->setMethods(array('getGitHub', 'parseConfig'))
-            ->createMock();
+            ->getMock();
         $check->expects($this->once())
             ->method('getGitHub')
             ->will($this->returnValue($github));
