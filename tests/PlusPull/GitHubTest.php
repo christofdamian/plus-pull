@@ -2,16 +2,14 @@
 
 namespace tests\PlusPull;
 
-use PlusPull\GitHub\Label;
-
+use Github\Api\Repo;
+use PHPUnit\Framework\TestCase;
+use PlusPull\GitHub;
 use PlusPull\GitHub\Comment;
-
+use PlusPull\GitHub\Label;
 use PlusPull\GitHub\PullRequest;
 
-use Github\Api\Repo;
-use PlusPull\GitHub;
-
-class GitHubTests extends \PHPUnit_Framework_TestCase
+class GitHubTests extends TestCase
 {
     private $client;
 
@@ -24,7 +22,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
     {
         $this->client = $this->getMockBuilder('Github\Client')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
 
         $this->github = new GitHub($this->client);
         $this->github->setRepository(
@@ -96,7 +94,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $pullRequest->expects($this->once())
             ->method('all')
             ->with(
@@ -122,7 +120,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->setConstructorArgs(array($this->client))
             ->setMethods(array('getComments', 'getStatuses', 'getLabels'))
-            ->getMock();
+            ->createMock();
         $github->expects($this->once())
             ->method('getComments')
             ->with($this->equalTo($tmp->number))
@@ -174,7 +172,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $labels->expects($this->once())
             ->method('all')
             ->with(
@@ -185,7 +183,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->once())
             ->method('labels')
             ->will($this->returnValue($labels));
@@ -226,7 +224,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $labels->expects($this->exactly(2))
             ->method('all')
             ->with(
@@ -237,7 +235,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->exactly(2))
             ->method('labels')
             ->will($this->returnValue($labels));
@@ -264,7 +262,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $labels->expects($this->once())
             ->method('create')
             ->with(
@@ -276,7 +274,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->once())
             ->method('labels')
             ->will($this->returnValue($labels));
@@ -310,7 +308,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $labels->expects($this->once())
             ->method('all')
             ->with(
@@ -322,7 +320,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->once())
             ->method('labels')
             ->will($this->returnValue($labels));
@@ -349,7 +347,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $labels->expects($this->once())
             ->method('add')
             ->with(
@@ -362,7 +360,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->once())
             ->method('labels')
             ->will($this->returnValue($labels));
@@ -385,7 +383,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $labels = $this->getMockBuilder('Github\Api\Issue\Labels')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $labels->expects($this->once())
             ->method('remove')
             ->with(
@@ -398,7 +396,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->once())
             ->method('labels')
             ->will($this->returnValue($labels));
@@ -445,7 +443,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $comments = $this->getMockBuilder('Github\Api\Issue\Comments')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $comments->expects($this->once())
             ->method('all')
             ->with(
@@ -457,7 +455,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $issue = $this->getMockBuilder('Github\Api\Issue')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $issue->expects($this->once())
             ->method('comments')
             ->will($this->returnValue($comments));
@@ -469,7 +467,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $reviewComments = $this->getMockBuilder('Github\Api\Issue\Comments')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $reviewComments->expects($this->once())
             ->method('all')
             ->with(
@@ -481,7 +479,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $pullRequest->expects($this->once())
             ->method('comments')
             ->will($this->returnValue($reviewComments));
@@ -501,7 +499,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $statuses = $this->getMockBuilder('Github\Api\Repository\Statuses')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $statuses->expects($this->once())
             ->method('combined')
             ->with(
@@ -513,7 +511,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $repo = $this->getMockBuilder('Github\Api\Repo')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $repo->expects($this->once())
             ->method('statuses')
             ->will($this->returnValue($statuses));
@@ -534,7 +532,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $pullRequest = $this->getMockBuilder('Github\Api\PullRequest')
                      ->disableOriginalConstructor()
-                     ->getMock();
+                     ->createMock();
         $pullRequest->expects($this->once())
             ->method('merge')
             ->with(
@@ -579,7 +577,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
         $github = $this->getMockBuilder('PlusPull\GitHub')
                 ->setConstructorArgs(array($this->client))
                 ->setMethods(array('addLabel', 'removeLabel'))
-                ->getMock();
+                ->createMock();
         $github->expects($this->once())
             ->method('addLabel')
             ->with(
@@ -603,7 +601,7 @@ class GitHubTests extends \PHPUnit_Framework_TestCase
 
         $authorizations = $this->getMockBuilder('Github\Api\Authorizations')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $authorizations->expects($this->once())
             ->method('create')
             ->with(

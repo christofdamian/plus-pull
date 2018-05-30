@@ -2,12 +2,12 @@
 
 namespace tests\PlusPull\Commands;
 
-use Symfony\Component\Console\Helper\HelperSet;
-
+use PHPUnit\Framework\TestCase;
 use PlusPull\Commands\TokenCreate;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class TokenCreateTest extends \PHPUnit_Framework_TestCase
+class TokenCreateTest extends TestCase
 {
     public function testConfigure()
     {
@@ -22,20 +22,9 @@ class TokenCreateTest extends \PHPUnit_Framework_TestCase
         $password = 'pass';
         $token = 'token123';
 
-        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $yaml->staticExpects($this->once())
-            ->method('dump')
-            ->with(
-                $this->equalTo(
-                    array('authorization' => array('token' => $token))
-                )
-            );
-
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $github->expects($this->once())
             ->method('authenticate')
             ->with($this->equalTo($username), $this->equalTo($password));
@@ -45,30 +34,31 @@ class TokenCreateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($token));
 
         $tokenCreate = $this->getMockBuilder('PlusPull\Commands\TokenCreate')
-            ->setMethods(array('getGitHub', 'getYaml'))
-            ->getMock();
+            ->setMethods(array('getGitHub', 'dumpYaml'))
+            ->createMock();
         $tokenCreate->expects($this->once())
             ->method('getGitHub')
             ->will($this->returnValue($github));
         $tokenCreate->expects($this->once())
-            ->method('getYaml')
-            ->will($this->returnValue($yaml));
+            ->method('dumpYaml')
+            ->with(
+                $this->equalTo(
+                    array('authorization' => array('token' => $token))
+                )
+            );
 
         $tester = new CommandTester($tokenCreate);
 
-        $dialog = $this->getMock(
-            'Symfony\Component\Console\Helper\DialogHelper'
+        $helper = $this->createMock(
+            'Symfony\Component\Console\Helper\QuestionHelper'
         );
-        $dialog->expects($this->once())
+        $helper->expects($this->exactly(2))
             ->method('ask')
-            ->will($this->returnValue($username));
-        $dialog->expects($this->once())
-            ->method('askHiddenResponse')
-            ->will($this->returnValue($password));
+            ->will($this->onConsecutiveCalls($username, $password));
 
         $tokenCreate->setHelperSet(new HelperSet());
 
-        $tokenCreate->getHelperSet()->set($dialog, 'dialog');
+        $tokenCreate->getHelperSet()->set($helper, 'question');
 
         $tester->execute(array('--note' => $note));
     }

@@ -2,11 +2,12 @@
 
 namespace tests\PlusPull\Commands;
 
+use PHPUnit\Framework\TestCase;
 use PlusPull\Commands\Check;
 use PlusPull\GitHub\PullRequest;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CheckTest extends \PHPUnit_Framework_TestCase
+class CheckTest extends TestCase
 {
     public function testConfigure()
     {
@@ -116,7 +117,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $username = 'user';
         $password = 'pass';
 
-        $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
+        $pullRequest = $this->createMock('PlusPull\GitHub\PullRequest');
         $pullRequest->expects($this->atLeastOnce())
             ->method('collectCommentLabels');
         $pullRequest->expects($this->atLeastOnce())
@@ -168,17 +169,9 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $yaml->staticExpects($this->any())
-            ->method('parse')
-            ->with($this->equalTo($configFile))
-            ->will($this->returnValue($config));
-
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
 
         if ($token) {
             $github->expects($this->once())
@@ -203,45 +196,19 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->method('updateLabels');
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
-            ->setMethods(array('getGitHub', 'getYaml'))
-            ->getMock();
+            ->setMethods(array('getGitHub', 'parseConfig'))
+            ->createMock();
         $check->expects($this->once())
             ->method('getGitHub')
             ->will($this->returnValue($github));
         $check->expects($this->once())
-            ->method('getYaml')
-            ->will($this->returnValue($yaml));
+            ->method('parseConfig')
+            ->with($this->equalTo($configFile))
+            ->will($this->returnValue($config));
 
         $tester = new CommandTester($check);
 
         $input['config-file'] = $configFile;
         $tester->execute($input);
-    }
-
-    public function testExecuteMissingConfig()
-    {
-        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
-            ->disableOriginalConstructor()
-            ->setMethods(array('parse'))
-            ->getMock();
-
-        $check = $this->getMockBuilder('PlusPull\Commands\Check')
-            ->setMethods(array('getYaml'))
-            ->getMock();
-        $check->expects($this->once())
-            ->method('getYaml')
-            ->will($this->returnValue($yaml));
-
-        $tester = new CommandTester($check);
-
-        try {
-            $tester->execute(array());
-            $this->fail('Expected InvalidArgumentException');
-        } catch (\InvalidArgumentException $e) {
-            $this->assertEquals(
-                'Empty or missing config file',
-                $e->getMessage()
-            );
-        }
     }
 }

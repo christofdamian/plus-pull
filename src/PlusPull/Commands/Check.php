@@ -40,7 +40,7 @@ class Check extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = $this->getYaml()->parse($input->getArgument('config-file'));
+        $config = $this->parseConfig($input->getArgument('config-file'));
 
         if (!is_array($config) || empty($config)) {
             throw new \InvalidArgumentException('Empty or missing config file');
@@ -66,7 +66,6 @@ class Check extends AbstractCommand
         }
 
         foreach ($repositories as $repositoryConfig) {
-
             $username = $repositoryConfig['username'];
             $repository = $repositoryConfig['name'];
             $checkStatus = !empty($repositoryConfig['status']);
@@ -172,5 +171,10 @@ class Check extends AbstractCommand
                 }
             }
         }
+    }
+
+    protected function parseConfig($filename)
+    {
+        return $this->getYaml()->parseFile($filename);
     }
 }

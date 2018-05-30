@@ -2,13 +2,12 @@
 
 namespace tests\PlusPull\GitHub;
 
+use PHPUnit\Framework\TestCase;
 use PlusPull\GitHub\Comment;
-
 use PlusPull\GitHub\Label;
-
 use PlusPull\GitHub\PullRequest;
 
-class PullRequestTest extends \PHPUnit_Framework_TestCase
+class PullRequestTest extends TestCase
 {
     private $pullRequest;
 

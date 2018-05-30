@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class TokenCreate extends AbstractCommand
 {
@@ -25,11 +26,15 @@ class TokenCreate extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getHelper('dialog');
+        $helper = $this->getHelper('question');
 
-        $output->writeln("Please enter your github credentials");
-        $username = $dialog->ask($output, 'username: ');
-        $password = $dialog->askHiddenResponse($output, 'password: ');
+        $question = new Question('GitHub Username?');
+        $username = $helper->ask($input, $output, $question);
+
+        $question = new Question('GitHub Password?');
+        $question->setHidden(true);
+        $question->setHiddenFallback(false);
+        $password = $helper->ask($input, $output, $question);
 
         $github = $this->getGitHub();
         $github->authenticate($username, $password);
@@ -40,9 +45,14 @@ class TokenCreate extends AbstractCommand
                  'token' => $token,
              ),
         );
-        $yaml = $this->getYaml()->dump($config);
+        $yaml = $this->dumpYaml($config);
 
         $output->writeln("\nAdd the following code to your config file\n");
         $output->writeln("<info>$yaml</info>");
+    }
+
+    protected function dumpYaml($config)
+    {
+        return $this->getYaml()->dump($config);
     }
 }

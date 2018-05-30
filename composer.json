@@ -7,11 +7,12 @@
     "require": {
         "symfony/console": "*",
         "symfony/yaml": "*",
-        "knplabs/github-api": "*"
+        "knplabs/github-api": "*",
+        "phpunit/phpunit": "^7",
+        "php-http/guzzle6-adapter": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "1.4.*",
-        "phpunit/phpunit": "*"
+        "squizlabs/php_codesniffer": "*"
     },
     "autoload": {
         "psr-0": { "PlusPull\\": "src/" }

@@ -1,4 +1,4 @@
-FROM php:7.0-cli
+FROM php:7.2-cli
 COPY . /usr/src/plus-pull/
 WORKDIR /usr/src/plus-pull
 
@@ -7,4 +7,4 @@ RUN php -r "readfile('https://raw.githubusercontent.com/composer/getcomposer.org
 
 RUN composer install
 
-CMD [ "php", "/usr/src/plus-pull/bin/pluspull.php" ]
+#CMD [ "php", "/usr/src/plus-pull/bin/pluspull.php" ]
