@@ -10,8 +10,8 @@
         "knplabs/github-api": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "1.4.*",
-        "phpunit/phpunit": "*"
+        "squizlabs/php_codesniffer": "*",
+        "phpunit/phpunit": "5.*"
     },
     "autoload": {
         "psr-0": { "PlusPull\\": "src/" }
