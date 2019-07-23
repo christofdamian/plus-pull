@@ -1,5 +1,8 @@
 CHANGES
 =======
+0.8.1
+* fix yaml read
+
 0.8.0
 * fix wait grace period "wait" support
 * upgrade phpunit, phpcs and php (Dockerfile)
