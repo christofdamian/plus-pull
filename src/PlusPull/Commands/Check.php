@@ -38,9 +38,14 @@ class Check extends AbstractCommand
         );
     }
 
+    public function getConfig($config_file)
+    {
+        $this->getYaml()->parse($config_file);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = $this->getYaml()->parse($input->getArgument('config-file'));
+        $config = $this->getConfig($input->getArgument('config-file'));
 
         if (!is_array($config) || empty($config)) {
             throw new \InvalidArgumentException('Empty or missing config file');
@@ -66,7 +71,6 @@ class Check extends AbstractCommand
         }
 
         foreach ($repositories as $repositoryConfig) {
-
             $username = $repositoryConfig['username'];
             $repository = $repositoryConfig['name'];
             $checkStatus = !empty($repositoryConfig['status']);
@@ -120,12 +124,10 @@ class Check extends AbstractCommand
                     $pullRequest->number.' ('.$pullRequest->title.')'
                 );
 
-                $output->writeln($wait);
-                $output->writeln(time()-strtotime($pullRequest->updatedAt));
-
                 if ($wait &&
                     $wait > time()-strtotime($pullRequest->updatedAt)) {
                     $output->write(' waiting');
+                    $pull = false;
                 }
 
                 $pullRequest->collectCommentLabels($labels);

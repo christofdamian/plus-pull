@@ -1,10 +1,14 @@
 CHANGES
 =======
+0.8.0
+* fix wait grace period "wait" support
+* upgrade phpunit, phpcs and php (Dockerfile)
+
 0.7.0
 * support for grace period after last comment "wait"
 * support for different GitHub merge methods "mergemethod"
 
-0.6.1 
+0.6.1
 * bugfix for labels
 
 0.6.0
@@ -18,7 +22,7 @@ CHANGES
 * check combined status
 
 0.5.11
------- 
+------
 * fix bug in last release
 
 0.5.9

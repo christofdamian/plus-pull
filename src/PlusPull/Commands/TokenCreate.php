@@ -23,6 +23,11 @@ class TokenCreate extends AbstractCommand
         );
     }
 
+    protected function yamlDump($config)
+    {
+        $this->getYaml()->dump($config);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelper('dialog');
@@ -40,7 +45,7 @@ class TokenCreate extends AbstractCommand
                  'token' => $token,
              ),
         );
-        $yaml = $this->getYaml()->dump($config);
+        $yaml = $this->yamlDump($config);
 
         $output->writeln("\nAdd the following code to your config file\n");
         $output->writeln("<info>$yaml</info>");

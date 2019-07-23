@@ -26,6 +26,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2001/01/01',
              ),
             'all ok + token' => array(
                 'input' => array('--pull' => true, '--limit' => 10),
@@ -36,6 +37,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => 'token123',
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2001/01/01',
              ),
              'limit' => array(
                 'input' => array('--pull' => true, '--limit' => 1),
@@ -46,6 +48,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2001/01/01',
             ),
             '-1' => array(
                 'input' => array('--pull' => true),
@@ -56,6 +59,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2001/01/01',
             ),
             'unmergeable' => array(
                 'input' => array('--pull' => true),
@@ -66,6 +70,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2001/01/01',
             ),
             'fail' => array(
                 'input' => array('--pull' => true),
@@ -76,6 +81,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => null,
                 'checkRepositoryLabelExists' => true,
                 'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2001/01/01',
             ),
             'all ok labelling' => array(
                 'input' => array('--pull' => true, '--limit' => 10),
@@ -86,7 +92,19 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 'token' => null,
                 'checkRepositoryLabelExists' => false,
                 'addRepositoryLabelCount' => 1,
+                'updatedAt' => '2001/01/01',
             ),
+            'too fresh' => array(
+                'input' => array('--pull' => true, '--limit' => 10),
+                'checkComments' => true,
+                'isMergeable' => true,
+                'checkStatuses' => true,
+                'mergeCount' => 2,
+                'token' => null,
+                'checkRepositoryLabelExists' => true,
+                'addRepositoryLabelCount' => 0,
+                'updatedAt' => '2999/0/01',
+             ),
         );
     }
 
@@ -100,6 +118,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
      * @param string $token
      * @param boolean $checkRepositoryLabelExists
      * @param integer $addRepositoryLabelCount
+     * @param string $updatedAt
      */
     public function testExecute(
         $input,
@@ -109,14 +128,16 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $mergeCount,
         $token,
         $checkRepositoryLabelExists,
-        $addRepositoryLabelCount
+        $addRepositoryLabelCount,
+        $updatedAt
     ) {
         $required = 3;
         $whitelist = array('usera');
         $username = 'user';
         $password = 'pass';
 
-        $pullRequest = $this->getMock('PlusPull\GitHub\PullRequest');
+        $pullRequest = $this->getMockBuilder('PlusPull\GitHub\PullRequest')
+            ->getMock();
         $pullRequest->expects($this->atLeastOnce())
             ->method('collectCommentLabels');
         $pullRequest->expects($this->atLeastOnce())
@@ -129,6 +150,8 @@ class CheckTest extends \PHPUnit_Framework_TestCase
         $pullRequest->expects($this->atLeastOnce())
             ->method('checkStatuses')
             ->will($this->returnValue($checkStatuses));
+
+        $pullRequest->updatedAt = $updatedAt;
 
         $configFile = 'test-config.yml';
 
@@ -150,6 +173,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                     'status' => true,
                     'required' => $required,
                     'whitelist' => $whitelist,
+                    'wait' => 100,
                     'labels' => array(
                         array(
                             'name' => 'blocked',
@@ -167,14 +191,6 @@ class CheckTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         );
-
-        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $yaml->staticExpects($this->any())
-            ->method('parse')
-            ->with($this->equalTo($configFile))
-            ->will($this->returnValue($config));
 
         $github = $this->getMockBuilder('PlusPull\GitHub')
             ->disableOriginalConstructor()
@@ -203,14 +219,15 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->method('updateLabels');
 
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
-            ->setMethods(array('getGitHub', 'getYaml'))
+            ->setMethods(array('getGitHub', 'getConfig'))
             ->getMock();
         $check->expects($this->once())
             ->method('getGitHub')
             ->will($this->returnValue($github));
         $check->expects($this->once())
-            ->method('getYaml')
-            ->will($this->returnValue($yaml));
+            ->method('getConfig')
+            ->with($this->equalTo($configFile))
+            ->will($this->returnValue($config));
 
         $tester = new CommandTester($check);
 
@@ -220,18 +237,12 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteMissingConfig()
     {
-        $yaml = $this->getMockBuilder('Symfony\Component\Yaml\Yaml')
-            ->disableOriginalConstructor()
-            ->setMethods(array('parse'))
-            ->getMock();
-
         $check = $this->getMockBuilder('PlusPull\Commands\Check')
-            ->setMethods(array('getYaml'))
+            ->setMethods(array('getConfig'))
             ->getMock();
         $check->expects($this->once())
-            ->method('getYaml')
-            ->will($this->returnValue($yaml));
-
+            ->method('getConfig')
+            ->will($this->returnValue(array()));
         $tester = new CommandTester($check);
 
         try {
