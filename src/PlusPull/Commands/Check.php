@@ -40,7 +40,7 @@ class Check extends AbstractCommand
 
     public function getConfig($config_file)
     {
-        $this->getYaml()->parse($config_file);
+        return $this->getYaml()->parse($config_file);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
