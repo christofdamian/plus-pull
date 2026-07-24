@@ -1,4 +1,4 @@
-⚠️ **This repository has moved to Codeberg: https://codeberg.org/cdamian/plus-pull**
+⚠️ **This repository has moved to Forgejo: https://forgejo.damian.net/christof/plus-pull**
 
 This GitHub repository is archived and no longer maintained here.
 [![Build Status](https://travis-ci.org/christofdamian/plus-pull.svg?branch=master)](https://travis-ci.org/christofdamian/plus-pull)
